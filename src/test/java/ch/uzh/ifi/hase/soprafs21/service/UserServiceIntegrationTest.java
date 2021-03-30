@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,18 +41,25 @@ public class UserServiceIntegrationTest {
         assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
-        testUser.setName("testName");
         testUser.setUsername("testUsername");
+        testUser.setToken("1");
+        testUser.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser.setPassword("TestPassword");
+        testUser.setCreatedOn();
+        testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        testUser.setGuessedOtherPicturesCorrectly(1);
+        testUser.setOwnPicturesCorrectlyGuessed(1);
+        testUser.setPlayerStatus(PlayerStatus.FINISHED);
+        testUser.setScore(1);
 
         // when
         User createdUser = userService.createUser(testUser);
 
         // then
         assertEquals(testUser.getId(), createdUser.getId());
-        assertEquals(testUser.getName(), createdUser.getName());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
-        assertEquals(OnlineStatus.OFFLINE, createdUser.getStatus());
+        assertEquals(OnlineStatus.OFFLINE, createdUser.getOnlineStatus());
     }
 
     @Test
@@ -59,16 +67,34 @@ public class UserServiceIntegrationTest {
         assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
-        testUser.setName("testName");
         testUser.setUsername("testUsername");
+        testUser.setToken("1");
+        testUser.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser.setPassword("TestPassword");
+        testUser.setCreatedOn();
+        testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        testUser.setGuessedOtherPicturesCorrectly(1);
+        testUser.setOwnPicturesCorrectlyGuessed(1);
+        testUser.setPlayerStatus(PlayerStatus.FINISHED);
+        testUser.setScore(1);
+
+
         User createdUser = userService.createUser(testUser);
 
         // attempt to create second user with same username
         User testUser2 = new User();
 
         // change the name but forget about the username
-        testUser2.setName("testName2");
         testUser2.setUsername("testUsername");
+        testUser2.setToken("1");
+        testUser2.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser2.setPassword("TestPassword");
+        testUser2.setCreatedOn();
+        testUser2.setCurrentlyCreating("TestCurrentlyCreating");
+        testUser2.setGuessedOtherPicturesCorrectly(1);
+        testUser2.setOwnPicturesCorrectlyGuessed(1);
+        testUser2.setPlayerStatus(PlayerStatus.FINISHED);
+        testUser2.setScore(1);
 
         // check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));

@@ -5,8 +5,8 @@ import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -51,21 +51,12 @@ public class User implements Serializable {
     private String currentlyCreating;
 
     @Column(nullable = false)
-    private LocalDate createdOn;
+    private String createdOn;
 
     @Column(nullable = false)
     private PlayerStatus playerStatus;
 
-    @Column(nullable = false)
-    private String name;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void addGuessPoint(int points){
         this.guessedOtherPicturesCorrectly += points;
@@ -83,12 +74,14 @@ public class User implements Serializable {
         this.playerStatus = playerStatus;
     }
 
-    public LocalDate getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
     public void setCreatedOn() {
-        this.createdOn = java.time.LocalDate.now();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+        Date date = new Date();
+        this.createdOn = sdf.format(date);
     }
 
     public String getCurrentlyCreating() {
@@ -160,11 +153,8 @@ public class User implements Serializable {
         this.token = token;
     }
 
-    public OnlineStatus getStatus() {
+    public OnlineStatus getOnlineStatus() {
         return onlineStatus;
     }
 
-    public void setStatus(OnlineStatus status) {
-        this.onlineStatus = status;
-    }
 }
