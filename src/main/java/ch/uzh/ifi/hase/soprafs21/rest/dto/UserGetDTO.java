@@ -1,13 +1,13 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
-import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 
 public class UserGetDTO {
 
     private Long id;
     private String name;
     private String username;
-    private UserStatus status;
+    private OnlineStatus status;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class UserGetDTO {
         this.username = username;
     }
 
-    public UserStatus getStatus() {
+    public OnlineStatus getStatus() {
         return status;
     }
 
-    public void setStatus(UserStatus status) {
+    public void setStatus(OnlineStatus status) {
         this.status = status;
     }
 }

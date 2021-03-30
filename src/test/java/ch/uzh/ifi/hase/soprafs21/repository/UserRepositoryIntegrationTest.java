@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.repository;
 
-import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class UserRepositoryIntegrationTest {
         User user = new User();
         user.setName("Firstname Lastname");
         user.setUsername("firstname@lastname");
-        user.setStatus(UserStatus.OFFLINE);
+        user.setStatus(OnlineStatus.OFFLINE);
         user.setToken("1");
 
         entityManager.persist(user);

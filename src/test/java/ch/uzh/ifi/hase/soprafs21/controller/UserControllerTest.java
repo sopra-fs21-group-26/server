@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
-import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -48,7 +48,7 @@ public class UserControllerTest {
         User user = new User();
         user.setName("Firstname Lastname");
         user.setUsername("firstname@lastname");
-        user.setStatus(UserStatus.OFFLINE);
+        user.setStatus(OnlineStatus.OFFLINE);
 
         List<User> allUsers = Collections.singletonList(user);
 
@@ -74,7 +74,7 @@ public class UserControllerTest {
         user.setName("Test User");
         user.setUsername("testUsername");
         user.setToken("1");
-        user.setStatus(UserStatus.ONLINE);
+        user.setStatus(OnlineStatus.ONLINE);
 
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setName("Test User");
