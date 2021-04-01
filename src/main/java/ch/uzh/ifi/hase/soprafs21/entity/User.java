@@ -41,19 +41,19 @@ public class User implements Serializable {
     @Column(nullable = false)
     private int score;
 
-    @Column(nullable = false)
+    @Column()
     private int guessedOtherPicturesCorrectly;
 
-    @Column(nullable = false)
+    @Column()
     private int ownPicturesCorrectlyGuessed;
 
-    @Column(nullable = false)
+    @Column()
     private String currentlyCreating;
 
     @Column(nullable = false)
     private String createdOn;
 
-    @Column(nullable = false)
+    @Column()
     private PlayerStatus playerStatus;
 
 

@@ -40,6 +40,8 @@ public class UserService {
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setOnlineStatus(OnlineStatus.OFFLINE);
+        newUser.setCreatedOn();
+        newUser.setScore(0);
 
         checkIfUserExists(newUser);
 
@@ -64,7 +66,7 @@ public class UserService {
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
         if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username and the name", "are"));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username and the name", "are"));
         }
     }
 }

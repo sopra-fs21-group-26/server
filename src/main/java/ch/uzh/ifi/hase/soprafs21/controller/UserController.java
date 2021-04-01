@@ -40,7 +40,7 @@ public class UserController {
         return userGetDTOs;
     }
 
-    @PostMapping("/users")
+    @PostMapping("/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
@@ -53,4 +53,7 @@ public class UserController {
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
+
+
+
 }
