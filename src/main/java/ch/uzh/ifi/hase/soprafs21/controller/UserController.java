@@ -40,6 +40,16 @@ public class UserController {
         return userGetDTOs;
     }
 
+    @GetMapping("/players/{id}")
+    @ResponseStatus(HttpStatus.OK) // 200 (as to REST specifications)
+    @ResponseBody
+    public UserGetDTO getSinglePlayer(@PathVariable long id){
+
+        User user = userService.getSingleUser(id);
+
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    }
+
     @PostMapping("/players")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
