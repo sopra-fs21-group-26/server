@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetProfileDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +40,17 @@ public class UserController {
         }
         return userGetDTOs;
     }
-
+    // 1. (backend) return getprofileviewdto
+    // --> Elo score, games played in total (also user), games won (also user), username
+    // 2. logout/login --> front und backend
     @GetMapping("/players/{id}")
     @ResponseStatus(HttpStatus.OK) // 200 (as to REST specifications)
     @ResponseBody
-    public UserGetDTO getSinglePlayer(@PathVariable long id){
+    public UserGetProfileDTO getSinglePlayer(@PathVariable long id){
 
         User user = userService.getSingleUser(id);
 
-        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+        return DTOMapper.INSTANCE.convertEntityToUserGetProfileDTO(user);
     }
 
     @PostMapping("/players")

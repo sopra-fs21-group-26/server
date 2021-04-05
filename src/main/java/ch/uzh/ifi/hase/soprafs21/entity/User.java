@@ -56,7 +56,29 @@ public class User implements Serializable {
     @Column()
     private PlayerStatus playerStatus;
 
+    @Column()
+    private int gamesPlayed;
 
+    @Column()
+    private int gamesWon;
+
+
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public void setGamesWon(int gamesWon) {
+        this.gamesWon = gamesWon;
+    }
+
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
+    }
 
     public void addGuessPoint(int points){
         this.guessedOtherPicturesCorrectly += points;
