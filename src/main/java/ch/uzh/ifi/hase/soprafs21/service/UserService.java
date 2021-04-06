@@ -78,6 +78,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage2, "password", "is"));
         }
         else{
+            user1.setOnlineStatus(OnlineStatus.ONLINE);
             return user1;
         }
     }
