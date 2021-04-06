@@ -40,10 +40,6 @@ public class UserController {
         return userGetDTOs;
     }
 
-
-
-
-
     @GetMapping("/players/leaderboard")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
