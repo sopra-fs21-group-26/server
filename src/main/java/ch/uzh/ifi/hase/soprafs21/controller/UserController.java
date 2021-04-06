@@ -1,14 +1,11 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetProfileDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +24,31 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/players/leaderboard")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<UserGetDTO> getAllUsers() {
+    public List<UserGetScoreboardDTO> getAllUsers() {
         // fetch all users in the internal representation
-        List<User> users = userService.getUsers();
-        List<UserGetDTO> userGetDTOs = new ArrayList<>();
+        List<User> users = userService.getSortedUsers();
+        List<UserGetScoreboardDTO> userGetScoreboardDTOs = new ArrayList<>();
 
         // convert each user to the API representation
         for (User user : users) {
-            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+            userGetScoreboardDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetScoreboardDTO(user));
         }
-        return userGetDTOs;
+        return userGetScoreboardDTOs;
     }
+
+    @GetMapping("/players/{username}")
+    @ResponseStatus(HttpStatus.OK) // 200 (as to REST specifications)
+    @ResponseBody
+    public UserGetScoreboardDTO getSearchedUser(@RequestBody UserGetUsernameDTO userGetUsernameDTO){
+        User user = DTOMapper.INSTANCE.convertUserGetUsernameDTOtoEntity(userGetUsernameDTO);
+        User user2= userService.checkIfUsernameExists(user);
+        return DTOMapper.INSTANCE.convertEntityToUserGetScoreboardDTO(user2);
+    }
+
+
     // 1. (backend) return getprofileviewdto
     // --> Elo score, games played in total (also user), games won (also user), username -->done
     // 2. logout/login --> front und backend
@@ -79,10 +87,10 @@ public class UserController {
     @PutMapping("/login")
     @ResponseStatus(HttpStatus.OK) //corresponding to REST Specification Status
     @ResponseBody
-    public UserPutTokenDTO loginUser(@RequestBody UserPostDTO userPostDTO){
+    public UserPutTokenIdDTO loginUser(@RequestBody UserPostDTO userPostDTO){
         User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
         User checkedUser = userService.checkLogin(user);
-        return DTOMapper.INSTANCE.convertEntityToUserPutTokenDTO(checkedUser);
+        return DTOMapper.INSTANCE.convertEntityToUserPutTokenIdDTO(checkedUser);
     }
 
 

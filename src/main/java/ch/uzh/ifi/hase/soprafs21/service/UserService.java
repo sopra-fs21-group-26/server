@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import java.lang.IllegalArgumentException;
 
 
 import java.util.List;
@@ -34,9 +33,26 @@ public class UserService {
     public UserService(@Qualifier("userRepository") UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+    //Todo: Test if Bubblesort works when implemented score mechanism!
+    public List<User> getSortedUsers() {
+        List <User> users = this.userRepository.findAll();
+        bubbleSort(users);
+        return users;
 
-    public List<User> getUsers() {
-        return this.userRepository.findAll();
+    }
+
+    public static void bubbleSort(List <User> users) {
+        int n = users.size();
+        User temp;
+        for (int i= 0; i<n; i++){
+            for(int j =1; j<(n-1); j++){
+                if (users.get(j-1).getScore() > users.get(j).getScore()){
+                    temp = users.get(j-1);
+                    users.set(j-1,users.get(j));
+                    users.set(j, temp);
+                }
+            }
+        }
     }
 
     public User createUser(User newUser) {
@@ -111,12 +127,22 @@ public class UserService {
      * @throws org.springframework.web.server.ResponseStatusException
      * @see User
      */
-    private void checkIfUserExists(User userToBeCreated) {
+    public void checkIfUserExists(User userToBeCreated) {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
         if (userByUsername != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username and the name", "are"));
         }
+    }
+
+    public User checkIfUsernameExists(User userForScoreboard){
+        User user = userRepository.findByUsername(userForScoreboard.getUsername());
+
+        String baseErrorMessage = "The %s provided %s not exist!";
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, "username", "does"));
+        }
+        return user;
     }
 }

@@ -48,21 +48,21 @@ public class UserControllerTest {
         // given
         User user = new User();
         user.setUsername("firstname@lastname");
-        user.setOnlineStatus(OnlineStatus.OFFLINE);
+        user.setScore(0);
 
         List<User> allUsers = Collections.singletonList(user);
 
         // this mocks the UserService -> we define above what the userService should return when getUsers() is called
-        given(userService.getUsers()).willReturn(allUsers);
+        given(userService.getSortedUsers()).willReturn(allUsers);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder getRequest = get("/players/leaderboard").contentType(MediaType.APPLICATION_JSON);
 
         // then
         mockMvc.perform(getRequest).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-                .andExpect(jsonPath("$[0].status", is(user.getOnlineStatus().toString())));
+                .andExpect(jsonPath("$[0].score", is(user.getScore())));
     }
 
     @Test
