@@ -59,7 +59,7 @@ public class UserServiceIntegrationTest {
         assertEquals(testUser.getId(), createdUser.getId());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
-        assertEquals(OnlineStatus.OFFLINE, createdUser.getOnlineStatus());
+        assertEquals(OnlineStatus.ONLINE, createdUser.getOnlineStatus());
     }
 
     @Test
