@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
@@ -108,8 +109,4 @@ public class UserController {
         User checkedUser = userService.checkLogin(user);
         return DTOMapper.INSTANCE.convertEntityToUserPutTokenIdDTO(checkedUser);
     }
-
-
-
-
 }
