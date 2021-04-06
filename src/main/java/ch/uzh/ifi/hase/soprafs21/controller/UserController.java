@@ -24,6 +24,26 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    @GetMapping("/users")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<UserGetDTO> getAllUsersTest() {
+        // fetch all users in the internal representation
+        List<User> users = userService.getUsers();
+        List<UserGetDTO> userGetDTOs = new ArrayList<>();
+
+        // convert each user to the API representation
+        for (User user : users) {
+            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+        }
+        return userGetDTOs;
+    }
+
+
+
+
+
     @GetMapping("/players/leaderboard")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -39,13 +59,13 @@ public class UserController {
         return userGetScoreboardDTOs;
     }
 
-    @GetMapping("/players/{username}")
+    //change to path variable
+    @GetMapping("/players/search/{username}")
     @ResponseStatus(HttpStatus.OK) // 200 (as to REST specifications)
     @ResponseBody
-    public UserGetScoreboardDTO getSearchedUser(@RequestBody UserGetUsernameDTO userGetUsernameDTO){
-        User user = DTOMapper.INSTANCE.convertUserGetUsernameDTOtoEntity(userGetUsernameDTO);
-        User user2= userService.checkIfUsernameExists(user);
-        return DTOMapper.INSTANCE.convertEntityToUserGetScoreboardDTO(user2);
+    public UserGetScoreboardDTO getSearchedUser(@PathVariable String username){
+        User user= userService.checkIfUsernameExists(username);
+        return DTOMapper.INSTANCE.convertEntityToUserGetScoreboardDTO(user);
     }
 
 

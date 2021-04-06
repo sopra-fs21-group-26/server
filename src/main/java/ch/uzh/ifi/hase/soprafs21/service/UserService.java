@@ -33,6 +33,11 @@ public class UserService {
     public UserService(@Qualifier("userRepository") UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+    public List<User> getUsers(){
+        List <User> users = this.userRepository.findAll();
+        return users;
+    }
+
     //Todo: Test if Bubblesort works when implemented score mechanism!
     public List<User> getSortedUsers() {
         List <User> users = this.userRepository.findAll();
@@ -136,8 +141,8 @@ public class UserService {
         }
     }
 
-    public User checkIfUsernameExists(User userForScoreboard){
-        User user = userRepository.findByUsername(userForScoreboard.getUsername());
+    public User checkIfUsernameExists(String username){
+        User user = userRepository.findByUsername(username);
 
         String baseErrorMessage = "The %s provided %s not exist!";
         if (user == null) {
