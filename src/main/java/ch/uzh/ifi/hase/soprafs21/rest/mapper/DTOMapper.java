@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetProfileDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -36,5 +37,7 @@ public interface DTOMapper {
     @Mapping(source = "gamesPlayed", target = "gamesPlayed")
     UserGetProfileDTO convertEntityToUserGetProfileDTO(User user);
 
-
+    @Mapping(source = "token", target = "token")
+    User convertUserPutTokenDTOtoEntity(UserPutTokenDTO userPutTokenDTO);
+    UserPutTokenDTO convertEntityToUserPutTokenDTO(User user);
 }

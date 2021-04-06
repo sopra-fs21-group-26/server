@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import java.lang.IllegalArgumentException;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +41,7 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-        newUser.setOnlineStatus(OnlineStatus.OFFLINE);
+        newUser.setOnlineStatus(OnlineStatus.ONLINE);
         newUser.setCreatedOn();
         newUser.setScore(0);
 
@@ -52,6 +54,35 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
+
+    public void logoutUser(User user){
+        User user1 = userRepository.findByToken(user.getToken());
+        if (user1 == null){
+            String baseErrorMessage = "User with token was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+        else {
+            user1.setOnlineStatus(OnlineStatus.OFFLINE);
+        }
+    }
+
+    public User checkLogin(User user){
+        User user1 = userRepository.findByUsername(user.getUsername());
+
+        String baseErrorMessage = "The %s provided %s not registered. Therefore, the user could not be logged in!";
+        if (user1 == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage, "username", "is"));
+        }
+        if (!user1.getPassword().equals(user.getPassword())){
+            String baseErrorMessage2 = "The %s provided %s not correct. Therefore, the user could not be logged in!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format(baseErrorMessage2, "password", "is"));
+        }
+        else{
+            return user1;
+        }
+    }
+
+
 
     public User getSingleUser(long id){
 
