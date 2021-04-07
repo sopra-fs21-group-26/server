@@ -109,4 +109,30 @@ public class UserController {
         User checkedUser = userService.checkLogin(user);
         return DTOMapper.INSTANCE.convertEntityToUserPutTokenIdDTO(checkedUser);
     }
+   // --> backend : check if user has permission to edit --> if id of user with token == path variable id
+
+    @PutMapping("/edit/{token}/{id}")
+    @ResponseStatus(HttpStatus.OK) //corresponding to REST Specification Status
+    @ResponseBody
+    public HttpStatus checkEditPermission(@PathVariable String token, @PathVariable long id){
+        boolean permission = userService.checkEditPermission(token,  id);
+
+        if (permission){
+            return HttpStatus.OK;
+        }
+        else{
+            return HttpStatus.FORBIDDEN;
+        }
+    }
+
+    @PutMapping("/edit/profile")
+    @ResponseStatus(HttpStatus.OK) //corresponding to REST Specification Status
+    @ResponseBody
+
+    public UserGetProfileDTO editUsername(@RequestBody UserPutTokenUsernameDTO userPutTokenUsernameDTO) {
+        User user = DTOMapper.INSTANCE.convertUserPutTokenUsernameDTOtoEntity(userPutTokenUsernameDTO);
+        User editedUser = userService.editUser(user);
+        return DTOMapper.INSTANCE.convertEntityToUserGetProfileDTO(editedUser);
+    }
+
 }

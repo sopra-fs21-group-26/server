@@ -150,4 +150,25 @@ public class UserService {
         }
         return user;
     }
+
+    public boolean checkEditPermission(String token, long id){
+        User user = userRepository.findByToken(token);
+
+        if (user.getId() == id){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public User editUser(User user){
+        User userToEdit = userRepository.findByToken(user.getToken());
+
+        if (user.getUsername() != null){
+            userToEdit.setUsername(user.getUsername());
+        }
+        return userToEdit;
+    }
+
 }

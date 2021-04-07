@@ -49,6 +49,10 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     UserPutTokenIdDTO convertEntityToUserPutTokenIdDTO(User user);
 
+    @Mapping(source = "token", target = "token")
+    @Mapping(source = "username", target = "username")
+    User convertUserPutTokenUsernameDTOtoEntity(UserPutTokenUsernameDTO userPutTokenUsernameDTO);
+
 
 
     //Mappings for Lobby:
