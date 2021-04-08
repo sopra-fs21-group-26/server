@@ -3,13 +3,15 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LobbyGetDTO {
 
     private String lobbyName;
     private int numbersOfPlayers;
-    private User admin;
-    private ArrayList<User> playersInLobby;
+    private UserGetDTO admin;
+    private List<UserGetDTO> playersInLobby;
+
 
     public String getLobbyName() {
         return lobbyName;
@@ -19,11 +21,11 @@ public class LobbyGetDTO {
         return numbersOfPlayers;
     }
 
-    public User getAdmin() {
+    public UserGetDTO getAdmin() {
         return admin;
     }
 
-    public ArrayList<User> getPlayersInLobby() {
+    public List<UserGetDTO> getPlayersInLobby() {
         return playersInLobby;
     }
 
@@ -35,11 +37,11 @@ public class LobbyGetDTO {
         this.numbersOfPlayers = numbersOfPlayers;
     }
 
-    public void setAdmin(User admin) {
+    public void setAdmin(UserGetDTO admin) {
         this.admin = admin;
     }
 
-    public void setPlayersInLobby(ArrayList<User> playersInLobby) {
+    public void setPlayersInLobby(List<UserGetDTO> playersInLobby) {
         this.playersInLobby = playersInLobby;
     }
 }

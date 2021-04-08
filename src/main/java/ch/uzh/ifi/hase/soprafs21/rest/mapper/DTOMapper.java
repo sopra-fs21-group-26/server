@@ -6,6 +6,8 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
+import java.util.ArrayList;
+
 /**
  * DTOMapper
  * This class is responsible for generating classes that will automatically transform/map the internal representation
@@ -57,10 +59,13 @@ public interface DTOMapper {
 
     //Mappings for Lobby:
 
-    @Mapping(source = "lobbyName", target = "lobbyName")
+   /* @Mapping(source = "lobbyName", target = "lobbyName")
     @Mapping(source = "numbersOfPlayers", target = "numbersOfPlayers")
     @Mapping(source = "admin", target = "admin")
     @Mapping(source = "playersInLobby", target = "playersInLobby")
-    LobbyGetDTO convertEntityToLobbyGetDTO(Lobby lobby);
+    LobbyGetDTO convertEntityToLobbyGetDTO(Lobby lobby);*/
+
+    /*@Mapping(source = "allLobbies", target = "allLobbies")
+    LobbyGetAllLobbiesDTO convertEntityToLobbyGetAllLobbiesDTO(ArrayList<Lobby> allLobbies);*/
 
 }

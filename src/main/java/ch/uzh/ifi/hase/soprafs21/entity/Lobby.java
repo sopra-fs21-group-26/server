@@ -2,10 +2,12 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.LobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "LOBBY")
@@ -20,19 +22,33 @@ public class Lobby implements Serializable {
     @Column(nullable = false)
     private String lobbyName;
 
-    @Column(nullable = false)
-    private ArrayList<User> playersInLobby;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn ()
+    private List<User> playersInLobby;
 
     @Column(nullable = false)
     private LobbyStatus lobbyStatus;
 
-    @Column(nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn (nullable = false)
     private User admin;
 
     @Column(nullable = false)
     private int numbersOfPlayers;
 
 
+
+    public void addPlayerToPlayersInLobby(User user){
+        List<User> oldPlayersInLobby = this.getPlayersInLobby();
+        oldPlayersInLobby.add(user);
+        List <User> newPlayersInLobby = oldPlayersInLobby;
+        this.setPlayersInLobby(newPlayersInLobby);
+    }
+
+    public void increaseNumbersOfPlayers(){
+        int oldNumbersOfPlayers = this.getNumbersOfPlayers();
+        this.setNumbersOfPlayers(oldNumbersOfPlayers+1);
+    }
 
 
     public int getNumbersOfPlayers() {
@@ -51,7 +67,7 @@ public class Lobby implements Serializable {
         return lobbyName;
     }
 
-    public ArrayList<User> getPlayersInLobby() {
+    public List<User> getPlayersInLobby() {
         return playersInLobby;
     }
 
@@ -71,7 +87,7 @@ public class Lobby implements Serializable {
         this.lobbyName = lobbyName;
     }
 
-    public void setPlayersInLobby(ArrayList<User> playersInLobby) {
+    public void setPlayersInLobby(List<User> playersInLobby) {
         this.playersInLobby = playersInLobby;
     }
 
