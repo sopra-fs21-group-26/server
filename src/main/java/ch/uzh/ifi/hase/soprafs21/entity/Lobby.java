@@ -38,6 +38,19 @@ public class Lobby implements Serializable {
     private int numbersOfPlayers;
 
 
+    public boolean checkIfAllAreReady(){
+        boolean isReady = false;
+        for (User user : this.getPlayersInLobby()){
+            if (user.getPlayerStatus() == PlayerStatus.READY){
+                isReady = true;
+            }
+            else {
+                return isReady = false;
+            }
+        }
+        return isReady;
+    }
+
 
     public void addPlayerToPlayersInLobby(User user){
         List<User> oldPlayersInLobby = this.getPlayersInLobby();

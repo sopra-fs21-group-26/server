@@ -270,6 +270,11 @@ public class LobbyService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
         }
 
+        if( !lobby.checkIfAllAreReady()){
+            String baseErrorMessage = "You can't start the game, Not all players are ready";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
+        }
+
         lobby.changeAllPLayerStatusToPlaying();
         lobby.increaseAllPlayerGamesPlayed();
         lobby.setLobbyStatus(LobbyStatus.PLAYING);
