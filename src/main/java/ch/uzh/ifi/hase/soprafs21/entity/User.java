@@ -63,6 +63,10 @@ public class User implements Serializable {
     private int gamesWon;
 
 
+    public void increaseGamesPlayed(){
+        this.setGamesPlayed(this.getGamesPlayed()+1);
+    }
+
 
     public int getGamesWon() {
         return gamesWon;

@@ -27,7 +27,7 @@ public class LobbyController {
     // add admin in player list via token, set playerstatus, lobbystatus, set nr of players to 1
     // return lobbygetdto s.t players in lobby can be shown on lobbyscreen
     //createdLobby:returns lobby and admin
-    //-->
+    //Tested
     @PostMapping("/lobby/create/{lobbyName}")
     @ResponseStatus(HttpStatus.CREATED) //Corresponding to REST Specification
     @ResponseBody
@@ -40,6 +40,7 @@ public class LobbyController {
     //1. convert userputtokendto to entity
     //2. pass it to user service for authentification and return list of all available lobbies
     //3. return lobbygetalllobbiesdto to frontend such that can be shown
+    //tested
     @GetMapping("/lobby/join")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -62,6 +63,7 @@ public class LobbyController {
     //userservice: check Exceptions
     //else: lobby: add to playerlist, increase nrOfPlayers, check if full (change status if yes)
     //return to controller and convert
+    //Tested
     @PutMapping("/lobby/join/{lobbyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT) //Corresponding to REST Specification
     @ResponseBody
@@ -71,6 +73,7 @@ public class LobbyController {
         return LobbyDTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
+    //tested
     @GetMapping("lobby/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -79,5 +82,38 @@ public class LobbyController {
         return LobbyDTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
     }
 
+    //tested
+    @PutMapping("lobby/leave/{lobbyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void leaveLobby(@PathVariable long lobbyId, @RequestBody UserPutTokenDTO userPutTokenDTO){
+        User userToLeave = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        lobbyService.leaveLobby(lobbyId, userToLeave);
+    }
+
+    @PutMapping("lobby/ready/{lobbyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void makePlayerReady(@PathVariable long lobbyId, @RequestBody UserPutTokenDTO userPutTokenDTO){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        lobbyService.makePlayerReady(lobbyId, user);
+    }
+
+    //Tested
+    @PutMapping("lobby/kick/{lobbyId}/{username}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void kickPlayer(@PathVariable long lobbyId, @PathVariable String username, @RequestBody UserPutTokenDTO userPutTokenDTO){
+        User userWhoWantsToKick = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        lobbyService.kickPlayer(lobbyId, username, userWhoWantsToKick);
+    }
+
+    @PutMapping("lobby/start/{lobbyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void startGame(@PathVariable long lobbyId, @RequestBody UserPutTokenDTO userPutTokenDTO){
+        User userWhoWantsToStart = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        lobbyService.startGame(lobbyId, userWhoWantsToStart);
+    }
 
 }

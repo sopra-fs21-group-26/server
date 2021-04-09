@@ -12,6 +12,17 @@ public class LobbyGetDTO {
     private UserGetDTO admin;
     private List<UserGetDTO> playersInLobby;
 
+    //For testing
+    private Long lobbyId;
+    public Long getLobbyId() {
+        return lobbyId;
+    }
+
+    public void setLobbyId(Long lobbyId) {
+        this.lobbyId = lobbyId;
+    }
+    //For testing
+
 
     public String getLobbyName() {
         return lobbyName;

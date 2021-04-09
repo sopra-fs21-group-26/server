@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.LobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 
 import javax.persistence.*;
@@ -45,10 +46,41 @@ public class Lobby implements Serializable {
         this.setPlayersInLobby(newPlayersInLobby);
     }
 
+    public void deletePlayerInPlayersInLobby(User user){
+        List<User> oldPlayersInLobby = this.getPlayersInLobby();
+        oldPlayersInLobby.remove(user);
+        List <User> newPlayersInLobby = oldPlayersInLobby;
+        this.setPlayersInLobby(newPlayersInLobby);
+    }
+
     public void increaseNumbersOfPlayers(){
         int oldNumbersOfPlayers = this.getNumbersOfPlayers();
         this.setNumbersOfPlayers(oldNumbersOfPlayers+1);
     }
+
+    public void decreaseNumbersOfPlayers(){
+        int oldNumbersOfPlayers = this.getNumbersOfPlayers();
+        this.setNumbersOfPlayers(oldNumbersOfPlayers-1);
+    }
+
+    public void changeAllPLayerStatusToPlaying(){
+        List <User> players = this.getPlayersInLobby();
+        for (User user : players){
+            user.setPlayerStatus(PlayerStatus.PLAYING);
+        }
+    }
+
+    public void increaseAllPlayerGamesPlayed(){
+        List <User> players = this.getPlayersInLobby();
+        for (User user : players){
+            user.increaseGamesPlayed();
+        }
+    }
+
+
+
+
+
 
 
     public int getNumbersOfPlayers() {

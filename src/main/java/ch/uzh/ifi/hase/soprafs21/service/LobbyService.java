@@ -136,4 +136,144 @@ public class LobbyService {
         return lobbyRepository.findByLobbyId(lobbyId);
     }
 
+    public void leaveLobby(Long lobbyId, User user){
+        Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
+        User userToLeave = userRepository.findByToken(user.getToken());
+
+        if(userToLeave == null){
+            String baseErrorMessage = "User with token was not found! You don't have access!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (lobby == null){
+            String baseErrorMessage = "The lobby you want to leave doesn't exist!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, baseErrorMessage);
+        }
+
+        if (!lobby.getPlayersInLobby().contains(userToLeave)){
+            String baseErrorMessage = "You are not in this Lobby, you can't leave it!";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
+        }
+
+        if (lobby.getLobbyStatus() == LobbyStatus.PLAYING){
+            String baseErrorMessage = "The Lobby already started playing, you can't leave it!";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
+        }
+
+        if (userToLeave.getToken().equals(lobby.getAdmin().getToken())){
+            lobbyRepository.delete(lobby);
+            lobbyRepository.flush();
+        }
+
+        if (lobby.getNumbersOfPlayers() == 1){
+            lobbyRepository.delete(lobby);
+            lobbyRepository.flush();
+        }
+
+        if (lobby.getLobbyStatus() == LobbyStatus.FULL){
+            lobby.setLobbyStatus(LobbyStatus.WAITING);
+        }
+
+        lobby.decreaseNumbersOfPlayers();
+        lobby.deletePlayerInPlayersInLobby(userToLeave);
+        userToLeave.setPlayerStatus(PlayerStatus.LEFT);
+    }
+
+    public void makePlayerReady(long lobbyId, User user){
+        Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
+        User userToMakeReady = userRepository.findByToken(user.getToken());
+
+        if (lobby == null){
+            String baseErrorMessage = "You are not in this lobby!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, baseErrorMessage);
+        }
+
+        if(userToMakeReady == null){
+            String baseErrorMessage = "User with token was not found! You don't have access!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (!lobby.getPlayersInLobby().contains(userToMakeReady)){
+            String baseErrorMessage = "You are not in this Lobby, you can't leave it!";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
+        }
+
+        userToMakeReady.setPlayerStatus(PlayerStatus.READY);
+    }
+
+    public void kickPlayer(long lobbyId, String usernameToKick, User user){
+        Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
+        User userWhoWantsToKick = userRepository.findByToken(user.getToken());
+        User userToKick = userRepository.findByUsername(usernameToKick);
+
+        if (lobby == null){
+            String baseErrorMessage = "You are not in this lobby!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, baseErrorMessage);
+        }
+
+        if(userWhoWantsToKick == null){
+            String baseErrorMessage = "User with token was not found! You don't have access!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (!lobby.getPlayersInLobby().contains(userToKick)){
+            String baseErrorMessage = "You can't kick this Player, he is not in your lobby";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
+        }
+
+        if (!userWhoWantsToKick.getToken().equals(lobby.getAdmin().getToken())){
+            String baseErrorMessage = "You can't kick this Player, because you are not the admin";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
+        }
+
+        if (lobby.getNumbersOfPlayers() == 1){
+            lobbyRepository.delete(lobby);
+            lobbyRepository.flush();
+        }
+
+        if (lobby.getLobbyStatus() == LobbyStatus.FULL){
+            lobby.setLobbyStatus(LobbyStatus.WAITING);
+        }
+
+        userToKick.setPlayerStatus(PlayerStatus.LEFT);
+
+        lobby.decreaseNumbersOfPlayers();
+        lobby.deletePlayerInPlayersInLobby(userToKick);
+    }
+
+    public void startGame(long lobbyId, User user){
+        Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
+        User userWhoWantsToStart = userRepository.findByToken(user.getToken());
+
+        if (lobby == null){
+            String baseErrorMessage = "You are not in this lobby!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, baseErrorMessage);
+        }
+
+        if(userWhoWantsToStart == null){
+            String baseErrorMessage = "User with token was not found! You don't have access!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (!lobby.getPlayersInLobby().contains(userWhoWantsToStart)){
+            String baseErrorMessage = "You can't kick this Player, he is not in your lobby";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
+        }
+
+        if (lobby.getNumbersOfPlayers() <2){
+            String baseErrorMessage = "You can't start the game, you are not enough players";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
+        }
+
+        if (!lobby.getAdmin().getToken().equals(userWhoWantsToStart.getToken())){
+            String baseErrorMessage = "You can't start the game, you are not the admin";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
+        }
+
+        lobby.changeAllPLayerStatusToPlaying();
+        lobby.increaseAllPlayerGamesPlayed();
+        lobby.setLobbyStatus(LobbyStatus.PLAYING);
+    }
+
+
 }
