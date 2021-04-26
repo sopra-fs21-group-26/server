@@ -35,12 +35,12 @@ public class GameService {
 
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
-                        @Qualifier("userRepository") UserRepository userRepository) {
+                       @Qualifier("userRepository") UserRepository userRepository) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
     }
 
-    
+
     public List<Picture> getGrid() throws IOException, ParseException {
         String StringURL = "https://api.unsplash.com/photos/random/?count=16&client_id=3Sgz4djxGEDDUR3CiS6xSx_MKnU8PIYCdQOR8AkEHis";
         URL url = new URL(StringURL);
@@ -50,17 +50,15 @@ public class GameService {
         List<Picture> PictureList = new ArrayList<>();
         Scanner sc = new Scanner(url.openStream());
         String inline = new String();
-        while(sc.hasNext())
-        {
-            inline+=sc.nextLine();
+        while (sc.hasNext()) {
+            inline += sc.nextLine();
         }
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(inline);
         JSONArray jarray = new JSONArray();
         jarray.add(obj);
         JSONArray UnsplashArray = (JSONArray) jarray.get(0);
-        for(int i=0;i<UnsplashArray.size();i++)
-        {
+        for (int i = 0; i < UnsplashArray.size(); i++) {
             JSONObject obj1 = (JSONObject) UnsplashArray.get(i);
             JSONObject imgURLs = (JSONObject) obj1.get("urls");
             PictureList.add(new Picture((String) imgURLs.get("small"), i));
@@ -69,23 +67,24 @@ public class GameService {
         return PictureList;
     }
 
-    public Game getGame(long id){
+    public Game getGame(long id) {
         Optional<Game> game = gameRepository.findById(id);
-        if(!game.isPresent()){
+        if (!game.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
         return game.get();
     }
 
-   public Picture getRandomPicture(User user, long gameId){
+    public Picture getRandomPicture(User user, long gameId) {
         User userToAssignCoordinate = userRepository.findByToken(user.getToken());
         Game game = gameRepository.findByGameId(gameId);
 
-        List <Picture> pictures = game.getPicturesonGrid();
+        List<Picture> pictures = game.getPicturesonGrid();
         Random rand = new Random();
 
         Picture randomPicture = pictures.get(rand.nextInt(pictures.size()));
         userToAssignCoordinate.setOwnPictureCoordinate(randomPicture.getCoordinate());
         return randomPicture;
     }
+}
 

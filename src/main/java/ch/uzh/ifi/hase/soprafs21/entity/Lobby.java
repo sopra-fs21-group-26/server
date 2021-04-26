@@ -92,12 +92,6 @@ public class Lobby implements Serializable {
     }
 
 
-
-
-
-
-
-
     public int getNumbersOfPlayers() {
         return numbersOfPlayers;
     }

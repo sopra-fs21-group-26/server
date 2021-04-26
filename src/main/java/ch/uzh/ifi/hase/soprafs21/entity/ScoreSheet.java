@@ -13,7 +13,7 @@ public class ScoreSheet implements Serializable {
     @Id
     @GeneratedValue
     private Long scoreSheetId;
-    @OneToMany(targetEntity=User.class, fetch=FetchType.EAGER)
+    @ManyToMany(targetEntity=User.class, fetch=FetchType.EAGER)
     private List<User> players;
     @Column
     private Hashtable<String, Integer> scoreSheet = new Hashtable<>();

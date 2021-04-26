@@ -34,7 +34,8 @@ public class LobbyService {
 
     @Autowired
     public LobbyService(@Qualifier("lobbyRepository") LobbyRepository lobbyRepository,
-                        @Qualifier("userRepository") UserRepository userRepository, GameRepository gameRepository) {
+                        @Qualifier("userRepository") UserRepository userRepository,
+                        @Qualifier("gameRepository") GameRepository gameRepository) {
         this.lobbyRepository = lobbyRepository;
         this.userRepository = userRepository;
         this.gameRepository = gameRepository;
@@ -243,6 +244,15 @@ public class LobbyService {
         lobby.deletePlayerInPlayersInLobby(userToKick);
     }
 
+    public void resetAllPLayerPoints(Lobby lobby) {
+        List<User> players = lobby.getPlayersInLobby();
+        for (User user : players) {
+            user.resetPoints();
+            userRepository.save(user);
+            userRepository.flush();
+        }
+    }
+
     public Game startGame(long lobbyId, User user){
         Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
         List<User> players = lobby.getPlayersInLobby();
@@ -289,6 +299,10 @@ public class LobbyService {
         lobby.changeAllPLayerStatusToPlaying();
         lobby.increaseAllPlayerGamesPlayed();
         lobby.setLobbyStatus(LobbyStatus.PLAYING);
+        this.resetAllPLayerPoints(lobby);
+        lobbyRepository.save(lobby);
+        lobbyRepository.flush();
+
         return game;
     }
 
