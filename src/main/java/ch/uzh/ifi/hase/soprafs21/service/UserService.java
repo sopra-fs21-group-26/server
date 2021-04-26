@@ -51,7 +51,7 @@ public class UserService {
         User temp;
         for (int i= 0; i<n; i++){
             for(int j =1; j<(n-1); j++){
-                if (users.get(j-1).getScore() > users.get(j).getScore()){
+                if (users.get(j-1).getPoints() > users.get(j).getPoints()){
                     temp = users.get(j-1);
                     users.set(j-1,users.get(j));
                     users.set(j, temp);
@@ -64,7 +64,7 @@ public class UserService {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setOnlineStatus(OnlineStatus.ONLINE);
         newUser.setCreatedOn();
-        newUser.setScore(0);
+        newUser.resetPoints();
 
         checkIfUserExists(newUser);
 

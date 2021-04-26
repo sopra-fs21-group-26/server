@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.constant.LobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Game;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
@@ -10,17 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -30,12 +30,14 @@ public class LobbyService {
 
     private final LobbyRepository lobbyRepository;
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
     @Autowired
     public LobbyService(@Qualifier("lobbyRepository") LobbyRepository lobbyRepository,
-                        @Qualifier("userRepository") UserRepository userRepository) {
+                        @Qualifier("userRepository") UserRepository userRepository, GameRepository gameRepository) {
         this.lobbyRepository = lobbyRepository;
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
     }
 
     //create lobby in userService: set lobbyname, set admin via token,
@@ -241,8 +243,9 @@ public class LobbyService {
         lobby.deletePlayerInPlayersInLobby(userToKick);
     }
 
-    public void startGame(long lobbyId, User user){
+    public Game startGame(long lobbyId, User user){
         Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
+        List<User> players = lobby.getPlayersInLobby();
         User userWhoWantsToStart = userRepository.findByToken(user.getToken());
 
         if (lobby == null){
@@ -275,9 +278,18 @@ public class LobbyService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
         }
 
+        Game game = new Game(lobbyId, players);
+        game.setAdmin(lobby.getAdmin());
+        game.setGameName(lobby.getLobbyName());
+        game.setNumbersOfPlayers(lobby.getNumbersOfPlayers());
+        game.setPlayersInGame(lobby.getPlayersInLobby());
+        game = gameRepository.save(game);
+        gameRepository.flush();
+
         lobby.changeAllPLayerStatusToPlaying();
         lobby.increaseAllPlayerGamesPlayed();
         lobby.setLobbyStatus(LobbyStatus.PLAYING);
+        return game;
     }
 
 

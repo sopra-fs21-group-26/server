@@ -39,7 +39,7 @@ public class User implements Serializable {
     private String password;
 
     @Column(nullable = false)
-    private int score;
+    private int points;
 
     @Column()
     private int guessedOtherPicturesCorrectly;
@@ -62,6 +62,19 @@ public class User implements Serializable {
     @Column()
     private int gamesWon;
 
+    @Column()
+    private int score;
+
+    @Column()
+    private String ownPictureCoordinate;
+
+    public String getOwnPictureCoordinate() {
+        return ownPictureCoordinate;
+    }
+
+    public void setOwnPictureCoordinate(String ownPictureCoordinate) {
+        this.ownPictureCoordinate = ownPictureCoordinate;
+    }
 
     public void increaseGamesPlayed(){
         this.setGamesPlayed(this.getGamesPlayed()+1);
@@ -139,12 +152,16 @@ public class User implements Serializable {
         return guessedOtherPicturesCorrectly;
     }
 
-    public int getScore() {
-        return score;
+    public int getPoints() {
+        return points;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void resetPoints() {
+        this.points = 0;
+    }
+
+    public void addPoint() {
+        this.points += 1;
     }
 
     public String getPassword() {
@@ -181,6 +198,14 @@ public class User implements Serializable {
 
     public OnlineStatus getOnlineStatus() {
         return onlineStatus;
+    }
+
+    public void setScore(int score){
+        this.score = score;
+    }
+
+    public int getScore(){
+        return this.score;
     }
 
 }

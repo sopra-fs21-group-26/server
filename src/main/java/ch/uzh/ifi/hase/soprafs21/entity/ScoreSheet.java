@@ -20,6 +20,7 @@ public class ScoreSheet implements Serializable {
     private Hashtable<String, Integer> scoreSheet = new Hashtable<>();
 
     public ScoreSheet(){
+        this.scoreSheet.put("name", 1);
     }
 
     public ScoreSheet(List<User> players){

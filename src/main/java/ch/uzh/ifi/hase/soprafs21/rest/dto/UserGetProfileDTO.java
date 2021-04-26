@@ -7,9 +7,6 @@ public class UserGetProfileDTO {
     private int gamesPlayed;
     private int gamesWon;
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -21,10 +18,6 @@ public class UserGetProfileDTO {
 
     public void setGamesWon(int gamesWon) {
         this.gamesWon = gamesWon;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public String getUsername() {
