@@ -65,6 +65,17 @@ public class User implements Serializable {
     @Column()
     private int score;
 
+    @Column()
+    private String ownPictureCoordinate;
+
+    public String getOwnPictureCoordinate() {
+        return ownPictureCoordinate;
+    }
+
+    public void setOwnPictureCoordinate(String ownPictureCoordinate) {
+        this.ownPictureCoordinate = ownPictureCoordinate;
+    }
+
     public void increaseGamesPlayed(){
         this.setGamesPlayed(this.getGamesPlayed()+1);
     }

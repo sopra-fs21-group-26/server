@@ -279,6 +279,10 @@ public class LobbyService {
         }
 
         Game game = new Game(lobbyId, players);
+        game.setAdmin(lobby.getAdmin());
+        game.setGameName(lobby.getLobbyName());
+        game.setNumbersOfPlayers(lobby.getNumbersOfPlayers());
+        game.setPlayersInGame(lobby.getPlayersInLobby());
         game = gameRepository.save(game);
         gameRepository.flush();
 
