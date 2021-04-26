@@ -1,9 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
-import ch.uzh.ifi.hase.soprafs21.entity.Game;
-import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
-import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -59,6 +56,11 @@ public interface DTOMapper {
     @Mapping(source = "token", target = "token")
     @Mapping(source = "username", target = "username")
     User convertUserPutTokenUsernameDTOtoEntity(UserPutTokenUsernameDTO userPutTokenUsernameDTO);
+
+    @Mapping(source = "url", target = "url")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "coordinate", target = "coordinate")
+    PictureGetDTO convertEntityToPictureGetDTO(Picture picture);
 
 
 

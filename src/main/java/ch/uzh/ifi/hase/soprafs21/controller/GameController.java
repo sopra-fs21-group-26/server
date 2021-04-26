@@ -1,9 +1,12 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Game;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.Picture;
 import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetScoreSheetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PictureGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import org.json.simple.parser.ParseException;
@@ -44,6 +47,17 @@ public class GameController {
         ScoreSheet scoreSheet = game.getScoreSheet();
         return DTOMapper.INSTANCE.convertEntityToGameGetScoreSheetDTO(scoreSheet);
     }
+
+    @GetMapping("/games/{gameId}/picture")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public PictureGetDTO getRandomPicture(@RequestBody UserPutTokenDTO userPutTokenDTO, @PathVariable long gameId) {
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        Picture picture = gameService.getRandomPicture(user, gameId);
+        return DTOMapper.INSTANCE.convertEntityToPictureGetDTO(picture);
+    }
+
+
 
 
 

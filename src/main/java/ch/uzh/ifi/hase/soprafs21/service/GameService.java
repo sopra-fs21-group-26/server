@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Game;
 import ch.uzh.ifi.hase.soprafs21.entity.Picture;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.json.simple.JSONArray;
@@ -20,10 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 @Service
 @Transactional
@@ -78,6 +76,20 @@ public class GameService {
         }
         return game.get();
     }
+
+   public Picture getRandomPicture(User user, long gameId){
+        User userToAssignCoordinate = userRepository.findByToken(user.getToken());
+        Game game = gameRepository.findByGameId(gameId);
+
+        List <Picture> pictures = game.getPicturesonGrid();
+        Random rand = new Random();
+
+        Picture randomPicture = pictures.get(rand.nextInt(pictures.size()));
+        userToAssignCoordinate.setOwnPictureCoordinate(randomPicture.getCoordinate());
+        return randomPicture;
+    }
+
+
 
 
 }

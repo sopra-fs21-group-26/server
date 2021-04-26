@@ -1,7 +1,6 @@
-package ch.uzh.ifi.hase.soprafs21.entity;
+package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
-
-public class Picture {
+public class PictureGetDTO {
 
     private String Url;
     private int id;
@@ -14,8 +13,6 @@ public class Picture {
     public void setCoordinate(String coordinate) {
         this.coordinate = coordinate;
     }
-
-    public Picture(String link, int id){this.Url = link; this.id = id; }
 
     public String getUrl() {
         return Url;
