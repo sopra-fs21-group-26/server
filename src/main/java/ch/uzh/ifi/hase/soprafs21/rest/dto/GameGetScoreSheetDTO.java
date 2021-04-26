@@ -2,14 +2,16 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
 
-public class GameGetScoreSheetDTO {
-    private ScoreSheet scoreSheet;
+import java.util.Hashtable;
 
-    public ScoreSheet getScoreSheet() {
+public class GameGetScoreSheetDTO {
+    private Hashtable<String, Integer> scoreSheet;
+
+    public Hashtable<String, Integer> getScoreSheet() {
         return scoreSheet;
     }
 
-    public void setScoreSheet(ScoreSheet scoreSheet) {
+    public void setScoreSheet(Hashtable<String, Integer> scoreSheet) {
         this.scoreSheet = scoreSheet;
     }
 }

@@ -40,9 +40,8 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public GameGetScoreSheetDTO getScoreSheet(@PathVariable long gameID) throws IOException, ParseException {
-        //Game game = gameService.getGame(gameID);
-        ScoreSheet scoreSheet = new ScoreSheet();
-
+        Game game = gameService.getGame(gameID);
+        ScoreSheet scoreSheet = game.getScoreSheet();
         return DTOMapper.INSTANCE.convertEntityToGameGetScoreSheetDTO(scoreSheet);
     }
 
