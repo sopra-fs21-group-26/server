@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import static org.springframework.boot.SpringApplication.*;
+
 @RestController
 @SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        run(Application.class, args);
     }
 
     @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)

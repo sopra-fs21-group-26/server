@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.User;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 @Entity
@@ -89,6 +90,7 @@ public class Lobby implements Serializable {
             user.increaseGamesPlayed();
         }
     }
+
 
 
 

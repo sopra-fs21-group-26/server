@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Hashtable;
 import java.util.List;
 
 @Entity
@@ -12,10 +13,9 @@ public class Game implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
     private Long gameId;
 
-    @Column(nullable = false)
+    @Column
     private String gameName;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -23,16 +23,25 @@ public class Game implements Serializable {
     private List<User> playersInGame;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private User admin;
 
-    @Column(nullable = false)
+    @Column
     private int numbersOfPlayers;
 
     @Transient
     private List<Picture> picturesonGrid;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private ScoreSheet scoreSheet;
 
+    public Game() {
+    }
+
+    public Game(long lobbyId, List<User> players) {
+        this.scoreSheet = new ScoreSheet(players);
+        this.gameId = lobbyId;
+    }
 
     public User getAdmin() {
         return admin;
@@ -81,4 +90,10 @@ public class Game implements Serializable {
     public void setPicturesonGrid(List<Picture> picturesonGrid) {
         this.picturesonGrid = picturesonGrid;
     }
+
+
+    public ScoreSheet getScoreSheet(){
+        return this.scoreSheet;
+    }
+
 }

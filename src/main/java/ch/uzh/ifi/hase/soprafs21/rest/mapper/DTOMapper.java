@@ -1,10 +1,13 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Game;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
 
 import java.util.ArrayList;
 
@@ -32,7 +35,7 @@ public interface DTOMapper {
     UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "username", target = "username")
-    @Mapping(source = "score", target = "score")
+  //  @Mapping(source = "score", target = "score")
     @Mapping(source = "gamesWon", target = "gamesWon")
     @Mapping(source = "gamesPlayed", target = "gamesPlayed")
     UserGetProfileDTO convertEntityToUserGetProfileDTO(User user);
@@ -43,9 +46,11 @@ public interface DTOMapper {
 
     @Mapping(source= "id", target = "id")
     @Mapping(source = "username", target = "username")
-    @Mapping(source = "score", target = "score")
+    //@Mapping(source = "score", target = "score")
     UserGetScoreboardDTO convertEntityToUserGetScoreboardDTO(User user);
 
+    @Mapping(source = "scoreSheet", target = "scoreSheet")
+    GameGetScoreSheetDTO convertEntityToGameGetScoreSheetDTO(ScoreSheet scoreSheet);
     
     @Mapping(source = "token", target = "token")
     @Mapping(source = "id", target = "id")
