@@ -42,6 +42,16 @@ public class GameController {
             return Grid;
         }
 
+<<<<<<< Updated upstream
 
+=======
+    @GetMapping("/games/{gameID}/score")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public GameGetScoreSheetDTO getScoreSheet(@PathVariable long gameID) throws IOException, ParseException {
+        Game game = gameService.getGame(gameID);
+        ScoreSheet scoreSheet = game.getScoreSheet();
+        return DTOMapper.INSTANCE.convertEntityToGameGetScoreSheetDTO(scoreSheet);
+>>>>>>> Stashed changes
     }
 }
