@@ -68,7 +68,7 @@ public class GameService {
     }
 
     public Game getGame(long id) {
-        Optional<Game> game = gameRepository.findById(id);
+        Optional<Game> game = Optional.ofNullable(gameRepository.findByGameId(id));
         if (!game.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
         }
@@ -76,8 +76,16 @@ public class GameService {
     }
 
     public Picture getRandomPicture(User user, long gameId) {
-        User userToAssignCoordinate = userRepository.findByToken(user.getToken());
-        Game game = gameRepository.findByGameId(gameId);
+        Optional<User> ToAssignUser = Optional.ofNullable(userRepository.findByToken(user.getToken()));
+        if (!ToAssignUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
+        }
+        User userToAssignCoordinate = ToAssignUser.get();
+        Optional<Game> getGame = Optional.ofNullable(gameRepository.findByGameId(gameId));
+        if (!getGame.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found!");
+        }
+        Game game = getGame.get();
 
         List<Picture> pictures = game.getPicturesonGrid();
         Random rand = new Random();
