@@ -1,9 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,18 +13,21 @@ public class ScoreSheet implements Serializable {
     @Id
     @GeneratedValue
     private Long scoreSheetId;
-
+    @OneToMany(targetEntity=User.class, fetch=FetchType.EAGER)
+    private List<User> players;
+    @Column
     private Hashtable<String, Integer> scoreSheet = new Hashtable<>();
 
     public ScoreSheet(){
     }
 
     public ScoreSheet(List<User> players){
-            updateScoreSheet(players);
+            this.players = players;
+            updateScoreSheet();
         }
 
-    public void updateScoreSheet(List<User> players) {
-    for (User player : players){
+    public void updateScoreSheet() {
+    for (User player : this.players){
         String name = player.getUsername();
         int points = player.getPoints();
         this.scoreSheet.put(name, points);

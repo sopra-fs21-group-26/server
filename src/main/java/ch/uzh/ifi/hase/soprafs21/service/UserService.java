@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -188,5 +189,14 @@ public class UserService {
         }
         return userToEdit;
     }
+
+    public int addPoint(long playerId){
+        User player = userRepository.findById(playerId);
+        player.addPoint();
+        userRepository.save(player);
+        userRepository.flush();
+        return player.getPoints();
+    }
+
 
 }

@@ -4,12 +4,15 @@ import ch.uzh.ifi.hase.soprafs21.entity.Game;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.Picture;
 import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetScoreSheetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PictureGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
+import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +23,12 @@ import java.util.List;
 @RestController
 public class GameController {
     private final GameService gameService;
+    private  final  UserService userService;
 
-    GameController(GameService gameService) {
+    @Autowired
+    GameController(GameService gameService, UserService userService) {
         this.gameService = gameService;
+        this.userService = userService;
     }
 
     @GetMapping("/games/{gameID}/grid")
@@ -66,9 +72,12 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToPictureGetDTO(picture);
     }
 
-
-
-
+    @PutMapping("/games/points/{playerID}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public int addPoint(@PathVariable long playerID) throws IOException, ParseException {
+        return userService.addPoint(playerID);
+    }
 
 
 }

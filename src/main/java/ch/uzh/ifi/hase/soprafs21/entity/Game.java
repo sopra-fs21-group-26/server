@@ -93,6 +93,7 @@ public class Game implements Serializable {
 
 
     public ScoreSheet getScoreSheet(){
+        this.scoreSheet.updateScoreSheet();
         return this.scoreSheet;
     }
 
