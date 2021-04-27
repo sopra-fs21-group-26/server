@@ -44,9 +44,9 @@ public class LobbyController {
     @GetMapping("/lobby/join")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
-    public List<LobbyGetDTO> getAllAvailableLobbies(@RequestBody UserPutTokenDTO userPutTokenDTO){
-        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
-        List<Lobby> allAvailableLobbies = lobbyService.getAllAvailableLobbies(user);
+    public List<LobbyGetDTO> getAllAvailableLobbies(){
+ //       User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        List<Lobby> allAvailableLobbies = lobbyService.getAllAvailableLobbies();
         List<LobbyGetDTO> lobbyGetDTOS = new ArrayList<>();
 
         for (Lobby lobby : allAvailableLobbies){

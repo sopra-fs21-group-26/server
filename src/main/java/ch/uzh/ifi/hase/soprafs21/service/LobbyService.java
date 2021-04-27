@@ -78,13 +78,13 @@ public class LobbyService {
         return lobby;
     }
     //User user
-    public List<Lobby> getAllAvailableLobbies(User user){
-        User user2 = userRepository.findByToken(user.getToken());
-
+    public List<Lobby> getAllAvailableLobbies(){
+        /* User user2 = userRepository.findByToken(user.getToken());
         if (user2 == null){
             String baseErrorMessage = "User with token was not found! You don't have access!";
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
         }
+*/
         List<Lobby> allLobbies = lobbyRepository.findAll();
         List<Lobby> availableLobbies = new ArrayList<>();
         for (Lobby lobby : allLobbies){
