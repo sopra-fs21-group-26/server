@@ -91,6 +91,22 @@ public class GameController {
         gameService.checkIfGuessCorrect(gameId, coordinate, user);
     }
 
+    @PutMapping("games/creation/{gameId}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void setHasCreated(@PathVariable long gameId, @RequestBody UserPutTokenDTO userPutTokenDTO){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        gameService.setHasCreated(gameId, user);
+    }
+
+    @GetMapping("games/allCreated/{gameId}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public boolean haveAllCreated(@PathVariable long gameId){
+        boolean haveAllCreated = gameService.haveAllCreated(gameId);
+        return haveAllCreated;
+    }
+
 
 
 }

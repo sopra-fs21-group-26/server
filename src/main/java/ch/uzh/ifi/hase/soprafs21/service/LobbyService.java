@@ -268,6 +268,26 @@ public class LobbyService {
         }
     }
 
+    public boolean areAllReady(long lobbyId){
+        Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
+        boolean areAllReady;
+
+        if (lobby == null){
+            String baseErrorMessage = "This lobby doesn't exists!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, baseErrorMessage);
+        }
+
+        List<User> playersInLobby = lobby.getPlayersInLobby();
+        for (User user : playersInLobby){
+            if (user.getPlayerStatus() != PlayerStatus.READY){
+                return areAllReady = false;
+            }
+        }
+        return areAllReady = true;
+    }
+
+
+
     public Game startGame(long lobbyId, User user){
         Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
         List<User> players = lobby.getPlayersInLobby();

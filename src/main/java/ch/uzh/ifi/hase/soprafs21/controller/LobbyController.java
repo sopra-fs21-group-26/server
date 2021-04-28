@@ -91,6 +91,7 @@ public class LobbyController {
         lobbyService.leaveLobby(lobbyId, userToLeave);
     }
 
+    //tested
     @PutMapping("lobby/ready/{lobbyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
@@ -108,6 +109,16 @@ public class LobbyController {
         lobbyService.kickPlayer(lobbyId, username, userWhoWantsToKick);
     }
 
+    @GetMapping("/game/allReady/{lobbyId}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public boolean areAllReady(@PathVariable long lobbyId){
+        boolean areAllReady = lobbyService.areAllReady(lobbyId);
+        return areAllReady;
+    }
+
+
+
     @PutMapping("lobby/start/{lobbyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
@@ -115,5 +126,7 @@ public class LobbyController {
         User userWhoWantsToStart = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
         lobbyService.startGame(lobbyId, userWhoWantsToStart);
     }
+
+
 
 }

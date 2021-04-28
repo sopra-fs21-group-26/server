@@ -73,6 +73,18 @@ public class User implements Serializable {
     @Column()
     private String ownPictureCoordinate;
 
+    @Column
+    private boolean hasCreated;
+
+    public boolean isHasCreated() {
+        return hasCreated;
+    }
+
+    public void setHasCreated(boolean hasCreated) {
+        this.hasCreated = hasCreated;
+    }
+
+
     public int calculatePoints(){
         return this.guessedOtherPicturesCorrectly + 2 * this.ownPicturesCorrectlyGuessed;
     }

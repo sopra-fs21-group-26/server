@@ -216,6 +216,49 @@ public class GameService {
 
     }
 
+    public void setHasCreated(long gameId, User user){
+        Game game = gameRepository.findByGameId(gameId);
+        User userThatHasCreated = userRepository.findByToken(user.getToken());
+
+        if (game == null){
+            String baseErrorMessage = "Game was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (userThatHasCreated == null){
+            String baseErrorMessage = "User does not exist in this game";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (userThatHasCreated.getRecreatedPicture() == null){
+            String baseErrorMessage = "You can't proceed. You first have to recreate the Picture!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        userThatHasCreated.setHasCreated(true);
+
+        userRepository.save(userThatHasCreated);
+        userRepository.flush();
+    }
+
+    public boolean haveAllCreated(long gameId){
+        Game game = gameRepository.findByGameId(gameId);
+        boolean haveALlCreated;
+
+        if (game == null){
+            String baseErrorMessage = "Game was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        List<User> allPlayersInGame = game.getPlayersInGame();
+        for (User user : allPlayersInGame){
+            if (!user.isHasCreated()){
+                return haveALlCreated = false;
+            }
+        }
+        return haveALlCreated = true;
+    }
+
 
 
 
