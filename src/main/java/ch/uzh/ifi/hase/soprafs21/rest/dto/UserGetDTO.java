@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 
 public class UserGetDTO {
 
@@ -8,6 +9,11 @@ public class UserGetDTO {
     private String username;
     private OnlineStatus status;
     private String token;
+    private PlayerStatus playerStatus;
+
+    public PlayerStatus getPlayerStatus() { return playerStatus; }
+
+    public void setPlayerStatus(PlayerStatus playerStatus) { this.playerStatus = playerStatus; }
 
     public String getToken() { return token; }
 
