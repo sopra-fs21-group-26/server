@@ -76,6 +76,17 @@ public class User implements Serializable {
     @Column
     private boolean hasCreated;
 
+    @Column
+    private boolean hasGuessed;
+
+    public boolean isHasGuessed() {
+        return hasGuessed;
+    }
+
+    public void setHasGuessed(boolean hasGuessed) {
+        this.hasGuessed = hasGuessed;
+    }
+
     public boolean isHasCreated() {
         return hasCreated;
     }

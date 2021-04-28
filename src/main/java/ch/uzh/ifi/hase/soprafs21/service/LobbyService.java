@@ -328,7 +328,9 @@ public class LobbyService {
         game.setGameName(lobby.getLobbyName());
         game.setNumbersOfPlayers(lobby.getNumbersOfPlayers());
         game.setPlayersInGame(lobby.getPlayersInLobby());
-        game = gameRepository.save(game);
+        game.setGameRound(1);
+
+        gameRepository.save(game);
         gameRepository.flush();
 
         lobby.changeAllPLayerStatusToPlaying();

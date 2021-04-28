@@ -204,5 +204,34 @@ public class UserService {
         return player.getPoints();
     }
 
+    public void setHasCreated(User user){
+        User userThatHasCreated = userRepository.findByToken(user.getToken());
+
+        if (userThatHasCreated == null){
+            String baseErrorMessage = "User does not exist in this game";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (userThatHasCreated.getRecreatedPicture() == null){
+            String baseErrorMessage = "You can't proceed. You first have to recreate the Picture!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        userThatHasCreated.setHasCreated(true);
+
+        userRepository.save(userThatHasCreated);
+        userRepository.flush();
+    }
+
+    public void setHasGuessed(User user){
+        User userThatHasGuessed = userRepository.findByToken(user.getToken());
+
+        if (userThatHasGuessed == null){
+            String baseErrorMessage = "The user doesn't exist!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, baseErrorMessage);
+        }
+        userThatHasGuessed.setHasGuessed(true);
+    }
+
 
 }

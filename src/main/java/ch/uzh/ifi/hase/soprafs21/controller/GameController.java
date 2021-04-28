@@ -26,6 +26,9 @@ public class GameController {
         this.userService = userService;
     }
 
+
+
+
     @GetMapping("/games/{gameID}/grid")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -74,7 +77,7 @@ public class GameController {
         return userService.addPoint(playerID);
     }
 
-    @PutMapping("/games/guess/{gameId}")
+    @PutMapping("/games/guessScreen/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public GuessScreenGetDTO getGuessScreen(@PathVariable long gameId, @RequestBody UserPutTokenDTO userPutTokenDTO) {
@@ -83,7 +86,7 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToGuessScreenGetDTO(guessScreen);
     }
 
-    @PutMapping("/games/guess/{gameId}/{coordinate}")
+    @PutMapping("/games/correctGuess/{gameId}/{coordinate}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public void checkIfGuessCorrect(@PathVariable long gameId, @PathVariable String coordinate, @RequestBody UserPutTokenUsernameDTO userPutTokenUsernameDTO) {
@@ -91,12 +94,12 @@ public class GameController {
         gameService.checkIfGuessCorrect(gameId, coordinate, user);
     }
 
-    @PutMapping("games/creation/{gameId}")
+    @PutMapping("games/creation")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
-    public void setHasCreated(@PathVariable long gameId, @RequestBody UserPutTokenDTO userPutTokenDTO){
+    public void setHasCreated(@RequestBody UserPutTokenDTO userPutTokenDTO){
         User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
-        gameService.setHasCreated(gameId, user);
+        userService.setHasCreated(user);
     }
 
     @GetMapping("games/allCreated/{gameId}")
@@ -107,6 +110,23 @@ public class GameController {
         return haveAllCreated;
     }
 
+    @PutMapping("games/guess")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void setHasGuessed(@RequestBody UserPutTokenDTO userPutTokenDTO){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        userService.setHasGuessed(user);
+    }
+
+    @GetMapping("games/allGuessed/{gameId}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public boolean haveAllGuessed(@PathVariable long gameId){
+        boolean haveAllGuessed = gameService.haveAllGuessed(gameId);
+        return haveAllGuessed;
+    }
 
 
+    //To do: return true false if it was last round (one Mapping)
+    //To do:
 }
