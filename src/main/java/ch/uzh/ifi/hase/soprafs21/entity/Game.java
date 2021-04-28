@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class Game implements Serializable {
     public Game(long lobbyId, List<User> players) {
         this.scoreSheet = new ScoreSheet(players);
         this.gameId = lobbyId;
+        this.picturesonGrid = new ArrayList<>();
     }
 
     public int getGameRound() {

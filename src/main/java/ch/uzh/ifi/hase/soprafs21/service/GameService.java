@@ -62,6 +62,7 @@ public class GameService {
             PictureList.add(new Picture((String) imgURLs.get("small"), i));
         }
         for (int i = 0; i < PictureList.size(); i++) {
+            PictureList.get(i).setId((long) i);
             if(i<=3){
                 if(i%4==0){
                     PictureList.get(i).setCoordinate("A1");
@@ -135,6 +136,13 @@ public class GameService {
         }
         return game.get();
     }
+
+    public void saveGame(Game game){
+        gameRepository.save(game);
+        gameRepository.flush();
+    }
+
+
 
     public Picture getRandomPicture(User user, long gameId) {
         Optional<User> ToAssignUser = Optional.ofNullable(userRepository.findByToken(user.getToken()));

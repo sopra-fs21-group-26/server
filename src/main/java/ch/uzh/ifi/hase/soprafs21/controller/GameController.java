@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class GameController {
@@ -34,7 +36,7 @@ public class GameController {
     @ResponseBody
     public List<PictureGetDTO> getGrid(@PathVariable long gameID) throws IOException, ParseException {
         Game game = gameService.getGame(gameID);
-        if (game.getPicturesonGrid().size() > 1) {
+        if (game.getPicturesonGrid()!=null && !game.getPicturesonGrid().isEmpty()) {
             List<PictureGetDTO> Pictures = new ArrayList<>();
             for(int i = 0;i<game.getPicturesonGrid().size();i++){
                 Pictures.add(DTOMapper.INSTANCE.convertEntityToPictureGetDTO(game.getPicturesonGrid().get(i)));
@@ -44,6 +46,7 @@ public class GameController {
         else {
             List<Picture> Grid = gameService.getGrid();
             game.setPicturesonGrid(Grid);
+            gameService.saveGame(game);
             List<PictureGetDTO> Pictures = new ArrayList<>();
             for(int i = 0;i<Grid.size();i++){
                 Pictures.add(DTOMapper.INSTANCE.convertEntityToPictureGetDTO(Grid.get(i)));
