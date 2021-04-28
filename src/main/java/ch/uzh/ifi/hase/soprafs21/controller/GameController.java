@@ -35,24 +35,13 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public List<PictureGetDTO> getGrid(@PathVariable long gameID) throws IOException, ParseException {
-        Game game = gameService.getGame(gameID);
-        if (game.getPicturesonGrid()!=null && !game.getPicturesonGrid().isEmpty()) {
-            List<PictureGetDTO> Pictures = new ArrayList<>();
-            for(int i = 0;i<game.getPicturesonGrid().size();i++){
-                Pictures.add(DTOMapper.INSTANCE.convertEntityToPictureGetDTO(game.getPicturesonGrid().get(i)));
-            }
-            return Pictures;
-        }
-        else {
-            List<Picture> Grid = gameService.getGrid();
-            game.setPicturesonGrid(Grid);
-            gameService.saveGame(game);
+            List<Picture> Grid = gameService.getGrid(gameID);
             List<PictureGetDTO> Pictures = new ArrayList<>();
             for(int i = 0;i<Grid.size();i++){
                 Pictures.add(DTOMapper.INSTANCE.convertEntityToPictureGetDTO(Grid.get(i)));
             }
             return Pictures;
-        }
+
     }
 
     @GetMapping("/games/{gameID}/score")

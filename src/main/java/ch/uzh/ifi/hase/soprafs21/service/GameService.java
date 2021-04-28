@@ -39,7 +39,7 @@ public class GameService {
     }
 
 
-    public List<Picture> getGrid() throws IOException, ParseException {
+    public List<Picture> makeGrid(long gameID) throws IOException, ParseException {
         String StringURL = "https://api.unsplash.com/photos/random/?count=16&client_id=3Sgz4djxGEDDUR3CiS6xSx_MKnU8PIYCdQOR8AkEHis";
         URL url = new URL(StringURL);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
@@ -125,6 +125,10 @@ public class GameService {
 
 
         }
+        Game game = gameRepository.findByGameId(gameID);
+        game.setPicturesonGrid(PictureList);
+        gameRepository.save(game);
+        gameRepository.flush();
 
         return PictureList;
     }
@@ -137,9 +141,15 @@ public class GameService {
         return game.get();
     }
 
-    public void saveGame(Game game){
-        gameRepository.save(game);
-        gameRepository.flush();
+    public List<Picture> getGrid(long gameID) throws IOException, ParseException {
+        Game game = gameRepository.findByGameId(gameID);
+        if(game.getPicturesonGrid()==null){
+            List<Picture> PictureList = makeGrid(gameID);
+            return PictureList;
+        }
+        else{
+            return game.getPicturesonGrid();
+        }
     }
 
 
