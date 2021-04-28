@@ -99,6 +99,11 @@ public class GameService {
         List<User> users = game.getPlayersInGame();
         List<String> pictures = new ArrayList<>();
         List<String> userNames = new ArrayList<>();
+
+        if (game == null){
+            String baseErrorMessage = "Game was not found!";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
+        }
         for (User user1 : users) {
             if (!user1.getToken().equals(user.getToken())) {
                 userNames.add(user1.getUsername());
@@ -114,6 +119,21 @@ public class GameService {
         Game game = gameRepository.findByGameId(gameId);
         User loggedInUser = userRepository.findByToken(user.getToken());
         User toBeGuessed = userRepository.findByUsername(user.getUsername());
+
+        if (loggedInUser == null){
+            String baseErrorMessage = "User with token was not found! You don't have access!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (toBeGuessed == null){
+            String baseErrorMessage = "User you want to guess the pocture of was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        if (game == null){
+            String baseErrorMessage = "Game was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
 
         if (toBeGuessed.getCurrentlyCreating().getCoordinate().equals(coordinate)){
             loggedInUser.setGuessedOtherPicturesCorrectly(loggedInUser.getGuessedOtherPicturesCorrectly()+1);
