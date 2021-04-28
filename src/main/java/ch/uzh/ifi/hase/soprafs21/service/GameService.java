@@ -61,6 +61,69 @@ public class GameService {
             JSONObject imgURLs = (JSONObject) obj1.get("urls");
             PictureList.add(new Picture((String) imgURLs.get("small"), i));
         }
+        for (int i = 0; i < PictureList.size(); i++) {
+            if(i<=3){
+                if(i%4==0){
+                    PictureList.get(i).setCoordinate("A1");
+                }
+                if(i%4==1){
+                    PictureList.get(i).setCoordinate("A2");
+                }
+                if(i%4==2){
+                    PictureList.get(i).setCoordinate("A3");
+                }
+                if(i%4==3){
+                    PictureList.get(i).setCoordinate("A4");
+                }
+            }
+            else if(i<=7){
+                if(i%4==0){
+                    PictureList.get(i).setCoordinate("B1");
+                }
+                if(i%4==1){
+                    PictureList.get(i).setCoordinate("B2");
+                }
+                if(i%4==2){
+                    PictureList.get(i).setCoordinate("B3");
+                }
+                if(i%4==3){
+                    PictureList.get(i).setCoordinate("B4");
+                }
+
+            }
+            else if(i<=11){
+                if(i%4==0){
+                    PictureList.get(i).setCoordinate("C1");
+                }
+                if(i%4==1){
+                    PictureList.get(i).setCoordinate("C2");
+                }
+                if(i%4==2){
+                    PictureList.get(i).setCoordinate("C3");
+                }
+                if(i%4==3){
+                    PictureList.get(i).setCoordinate("C4");
+                }
+
+            }
+            else{
+                if(i%4==0){
+                    PictureList.get(i).setCoordinate("D1");
+                }
+                if(i%4==1){
+                    PictureList.get(i).setCoordinate("D2");
+                }
+                if(i%4==2){
+                    PictureList.get(i).setCoordinate("D3");
+                }
+                if(i%4==3){
+                    PictureList.get(i).setCoordinate("D4");
+                }
+
+            }
+
+
+        }
 
         return PictureList;
     }
