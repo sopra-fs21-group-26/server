@@ -85,6 +85,8 @@ public class UserService {
         }
         else {
             user1.setOnlineStatus(OnlineStatus.OFFLINE);
+            userRepository.save(user1);
+            userRepository.flush();
         }
     }
 
@@ -101,6 +103,8 @@ public class UserService {
         }
         else{
             user1.setOnlineStatus(OnlineStatus.ONLINE);
+            userRepository.save(user1);
+            userRepository.flush();
             return user1;
         }
     }
@@ -187,6 +191,8 @@ public class UserService {
         if (user.getUsername() != null){
             userToEdit.setUsername(user.getUsername());
         }
+        userRepository.save(userToEdit);
+        userRepository.flush();
         return userToEdit;
     }
 

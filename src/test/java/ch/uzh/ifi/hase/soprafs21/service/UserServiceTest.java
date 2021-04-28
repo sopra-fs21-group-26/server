@@ -36,7 +36,7 @@ public class UserServiceTest {
         testUser.setOnlineStatus(OnlineStatus.ONLINE);
         testUser.setPassword("TestPassword");
         testUser.setCreatedOn();
-        testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        //testUser.setCurrentlyCreating("TestCurrentlyCreating");
         testUser.setGuessedOtherPicturesCorrectly(1);
         testUser.setOwnPicturesCorrectlyGuessed(1);
         testUser.setPlayerStatus(PlayerStatus.FINISHED);

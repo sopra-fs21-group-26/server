@@ -3,7 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 public class PictureGetDTO {
 
     private String Url;
-    private int id;
+    private long id;
     private String coordinate;
 
     public String getCoordinate() {
@@ -22,11 +22,11 @@ public class PictureGetDTO {
         Url = url;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

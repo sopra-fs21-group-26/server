@@ -46,7 +46,7 @@ public class UserServiceIntegrationTest {
         testUser.setOnlineStatus(OnlineStatus.ONLINE);
         testUser.setPassword("TestPassword");
         testUser.setCreatedOn();
-        testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        //testUser.setCurrentlyCreating("TestCurrentlyCreating");
         testUser.setGuessedOtherPicturesCorrectly(1);
         testUser.setOwnPicturesCorrectlyGuessed(1);
         testUser.setPlayerStatus(PlayerStatus.FINISHED);
@@ -72,7 +72,7 @@ public class UserServiceIntegrationTest {
         testUser.setOnlineStatus(OnlineStatus.ONLINE);
         testUser.setPassword("TestPassword");
         testUser.setCreatedOn();
-        testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        //testUser.setCurrentlyCreating("TestCurrentlyCreating");
         testUser.setGuessedOtherPicturesCorrectly(1);
         testUser.setOwnPicturesCorrectlyGuessed(1);
         testUser.setPlayerStatus(PlayerStatus.FINISHED);
@@ -90,7 +90,7 @@ public class UserServiceIntegrationTest {
         testUser2.setOnlineStatus(OnlineStatus.ONLINE);
         testUser2.setPassword("TestPassword");
         testUser2.setCreatedOn();
-        testUser2.setCurrentlyCreating("TestCurrentlyCreating");
+        //testUser2.setCurrentlyCreating("TestCurrentlyCreating");
         testUser2.setGuessedOtherPicturesCorrectly(1);
         testUser2.setOwnPicturesCorrectlyGuessed(1);
         testUser2.setPlayerStatus(PlayerStatus.FINISHED);

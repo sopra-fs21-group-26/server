@@ -62,7 +62,9 @@ public interface DTOMapper {
     @Mapping(source = "coordinate", target = "coordinate")
     PictureGetDTO convertEntityToPictureGetDTO(Picture picture);
 
-
+    @Mapping(source = "usernames", target = "usernames")
+    @Mapping(source = "recreatedPictures", target = "recreatedPictures")
+    GuessScreenGetDTO convertEntityToGuessScreenGetDTO(GuessScreen guessScreen);
 
     //Mappings for Lobby:
 

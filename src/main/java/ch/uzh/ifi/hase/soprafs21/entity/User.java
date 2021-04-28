@@ -47,8 +47,13 @@ public class User implements Serializable {
     @Column()
     private int ownPicturesCorrectlyGuessed;
 
-    @Column()
-    private String currentlyCreating;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn
+    private Picture currentlyCreating;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
+    private Picture recreatedPicture;
 
     @Column(nullable = false)
     private String createdOn;
@@ -67,6 +72,18 @@ public class User implements Serializable {
 
     @Column()
     private String ownPictureCoordinate;
+
+    public int calculatePoints(){
+        return this.guessedOtherPicturesCorrectly + 2 * this.ownPicturesCorrectlyGuessed;
+    }
+
+    public Picture getRecreatedPicture() {
+        return recreatedPicture;
+    }
+
+    public void setRecreatedPicture(Picture recreatedPicture) {
+        this.recreatedPicture = recreatedPicture;
+    }
 
     public String getOwnPictureCoordinate() {
         return ownPictureCoordinate;
@@ -123,11 +140,11 @@ public class User implements Serializable {
         this.createdOn = sdf.format(date);
     }
 
-    public String getCurrentlyCreating() {
+    public Picture getCurrentlyCreating() {
         return currentlyCreating;
     }
 
-    public void setCurrentlyCreating(String currentlyCreating) {
+    public void setCurrentlyCreating(Picture currentlyCreating) {
         this.currentlyCreating = currentlyCreating;
     }
 
@@ -154,6 +171,10 @@ public class User implements Serializable {
 
     public int getPoints() {
         return points;
+    }
+
+    public void setPoints(int points){
+        this.points = points;
     }
 
     public void resetPoints() {

@@ -1,8 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
-import ch.uzh.ifi.hase.soprafs21.entity.Game;
-import ch.uzh.ifi.hase.soprafs21.entity.Picture;
-import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.json.simple.JSONArray;
@@ -94,5 +92,51 @@ public class GameService {
         userToAssignCoordinate.setOwnPictureCoordinate(randomPicture.getCoordinate());
         return randomPicture;
     }
+
+    public GuessScreen getGuessScreen(long gameId, User user) {
+        Game game = gameRepository.findByGameId(gameId);
+        GuessScreen guessScreen = new GuessScreen();
+        List<User> users = game.getPlayersInGame();
+        List<String> pictures = new ArrayList<>();
+        List<String> userNames = new ArrayList<>();
+        for (User user1 : users) {
+            if (!user1.getToken().equals(user.getToken())) {
+                userNames.add(user1.getUsername());
+                pictures.add(user1.getRecreatedPicture().getUrl());
+            }
+        }
+        guessScreen.setRecreatedPictures(pictures);
+        guessScreen.setUsernames(userNames);
+        return guessScreen;
+    }
+
+    public void checkIfGuessCorrect(long gameId, String coordinate, User user){
+        Game game = gameRepository.findByGameId(gameId);
+        User loggedInUser = userRepository.findByToken(user.getToken());
+        User toBeGuessed = userRepository.findByUsername(user.getUsername());
+
+        if (toBeGuessed.getCurrentlyCreating().getCoordinate().equals(coordinate)){
+            loggedInUser.setGuessedOtherPicturesCorrectly(loggedInUser.getGuessedOtherPicturesCorrectly()+1);
+            toBeGuessed.setOwnPicturesCorrectlyGuessed(toBeGuessed.getOwnPicturesCorrectlyGuessed()+1);
+
+            loggedInUser.setPoints(loggedInUser.calculatePoints());
+            loggedInUser.setScore(loggedInUser.getScore() + loggedInUser.calculatePoints());
+            toBeGuessed.setPoints(toBeGuessed.calculatePoints());
+            toBeGuessed.setScore(toBeGuessed.getScore() + toBeGuessed.calculatePoints());
+
+            userRepository.save(loggedInUser);
+            userRepository.save(toBeGuessed);
+            userRepository.flush();
+
+            ScoreSheet scoreSheet = new ScoreSheet(game.getPlayersInGame());
+        }
+
+    }
+
+
+
+
+
+
 }
 

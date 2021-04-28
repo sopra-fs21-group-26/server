@@ -35,6 +35,9 @@ public class Game implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private ScoreSheet scoreSheet;
 
+    @Column
+    private int gameRound;
+
     public Game() {
     }
 
@@ -42,6 +45,15 @@ public class Game implements Serializable {
         this.scoreSheet = new ScoreSheet(players);
         this.gameId = lobbyId;
     }
+
+    public int getGameRound() {
+        return gameRound;
+    }
+
+    public void setGameRound(int gameRound) {
+        this.gameRound = gameRound;
+    }
+
 
     public User getAdmin() {
         return admin;

@@ -132,6 +132,9 @@ public class LobbyService {
             lobbyToJoin.setLobbyStatus(LobbyStatus.WAITING);
         }
 
+        lobbyRepository.save(lobbyToJoin);
+        lobbyRepository.flush();
+
         return lobbyToJoin;
     }
 
@@ -180,6 +183,11 @@ public class LobbyService {
         lobby.decreaseNumbersOfPlayers();
         lobby.deletePlayerInPlayersInLobby(userToLeave);
         userToLeave.setPlayerStatus(PlayerStatus.LEFT);
+
+        lobbyRepository.save(lobby);
+        lobbyRepository.flush();
+        userRepository.save(userToLeave);
+        userRepository.flush();
     }
 
     public void makePlayerReady(long lobbyId, User user){
@@ -202,6 +210,8 @@ public class LobbyService {
         }
 
         userToMakeReady.setPlayerStatus(PlayerStatus.READY);
+        userRepository.save(userToMakeReady);
+        userRepository.flush();
     }
 
     public void kickPlayer(long lobbyId, String usernameToKick, User user){
@@ -242,6 +252,11 @@ public class LobbyService {
 
         lobby.decreaseNumbersOfPlayers();
         lobby.deletePlayerInPlayersInLobby(userToKick);
+
+        userRepository.save(userToKick);
+        userRepository.flush();
+        lobbyRepository.save(lobby);
+        lobbyRepository.flush();
     }
 
     public void resetAllPLayerPoints(Lobby lobby) {

@@ -75,7 +75,7 @@ public class UserControllerTest {
         user.setOnlineStatus(OnlineStatus.ONLINE);
         user.setPassword("TestPassword");
         user.setCreatedOn();
-        user.setCurrentlyCreating("TestCurrentlyCreating");
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
         user.setGuessedOtherPicturesCorrectly(1);
         user.setOwnPicturesCorrectlyGuessed(1);
         user.setPlayerStatus(PlayerStatus.FINISHED);

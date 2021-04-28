@@ -1,13 +1,8 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
-import ch.uzh.ifi.hase.soprafs21.entity.Game;
+import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.entity.Picture;
-import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
-import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetScoreSheetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.PictureGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -78,6 +73,24 @@ public class GameController {
     public int addPoint(@PathVariable long playerID) throws IOException, ParseException {
         return userService.addPoint(playerID);
     }
+
+    @PutMapping("/games/guess/{gameId}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public GuessScreenGetDTO getGuessScreen(@PathVariable long gameId, @RequestBody UserPutTokenDTO userPutTokenDTO) {
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        GuessScreen guessScreen = gameService.getGuessScreen(gameId, user);
+        return DTOMapper.INSTANCE.convertEntityToGuessScreenGetDTO(guessScreen);
+    }
+
+    @PutMapping("/games/guess/{gameId}/{coordinate}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void checkIfGuessCorrect(@PathVariable long gameId, @PathVariable String coordinate, @RequestBody UserPutTokenUsernameDTO userPutTokenUsernameDTO) {
+        User user = DTOMapper.INSTANCE.convertUserPutTokenUsernameDTOtoEntity(userPutTokenUsernameDTO);
+        gameService.checkIfGuessCorrect(gameId, coordinate, user);
+    }
+
 
 
 }
