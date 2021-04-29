@@ -53,6 +53,8 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToGameGetScoreSheetDTO(scoreSheet);
     }
 
+
+    //returns PictureGetDTO of random picture
     @GetMapping("/games/{gameId}/picture")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -69,6 +71,7 @@ public class GameController {
         return userService.addPoint(playerID);
     }
 
+    //returns guessScreenGetDTO of all players in lobby except "yourself" (list with username and list with string of recreated picture)
     @PutMapping("/games/guessScreen/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -78,6 +81,7 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToGuessScreenGetDTO(guessScreen);
     }
 
+    //adds the points to the user corresponding to his guess, need: token of logged in user and username that he guessed picture of
     @PutMapping("/games/correctGuess/{gameId}/{coordinate}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -86,6 +90,7 @@ public class GameController {
         gameService.checkIfGuessCorrect(gameId, coordinate, user);
     }
 
+    //after creating sets hascreated=true to see that he is ready for guessScreen
     @PutMapping("games/creation")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -94,6 +99,7 @@ public class GameController {
         userService.setHasCreated(user);
     }
 
+    //returns true if all users have created picture to continue to guessscreen
     @GetMapping("games/allCreated/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -102,6 +108,8 @@ public class GameController {
         return haveAllCreated;
     }
 
+
+    //sets hasguessed = true if user has guessed all guesses to continue to next round
     @PutMapping("games/guess")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -110,6 +118,8 @@ public class GameController {
         userService.setHasGuessed(user);
     }
 
+
+    //returns true if all users have guessed all guesses to continue to next round
     @GetMapping("games/allGuessed/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -119,6 +129,9 @@ public class GameController {
     }
 
 
+
+
+    
     //To do: return true false if it was last round (one Mapping)
     //To do:
 }
