@@ -59,7 +59,7 @@ public class GameService {
         for (int i = 0; i < UnsplashArray.size(); i++) {
             JSONObject obj1 = (JSONObject) UnsplashArray.get(i);
             JSONObject imgURLs = (JSONObject) obj1.get("urls");
-            PictureList.add(new Picture((String) imgURLs.get("small"), i));
+            PictureList.add(new Picture((String) imgURLs.get("raw"), i));
         }
         for (int i = 0; i < PictureList.size(); i++) {
             PictureList.get(i).setId((long) i);
