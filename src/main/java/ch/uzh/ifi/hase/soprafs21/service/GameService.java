@@ -66,8 +66,9 @@ public class GameService {
             Picture temp = new Picture((String) imgURLs.get("raw"),i);
             PictureList.add(temp);
         }
+
         for (int i = 0; i < PictureList.size(); i++) {
-            PictureList.get(i).setId((long) i);
+            PictureList.get(i).setId((long) i+4);
             if(i<=3){
                 if(i%4==0){
                     PictureList.get(i).setCoordinate("A1");
