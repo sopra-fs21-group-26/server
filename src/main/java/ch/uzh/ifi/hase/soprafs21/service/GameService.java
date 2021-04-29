@@ -296,21 +296,37 @@ public class GameService {
     }
 
 
-    public SetList rotateSets(Game game) {
+    /*public SetList rotateSets(Game game) {
         SetList sets = game.getSetList();
         game.rotateSets();
         gameRepository.save(game);
         gameRepository.flush();
         return sets;
+    }*/
+
+    //next round:
+    public boolean isNextRound(long gameId){
+        Game game = gameRepository.findByGameId(gameId);
+
+        if (game.getGameRound() != 5){
+            game.setAllPlayerStatusToPlaying();
+            game.increaseGameRound();
+            game.resetAllHasCreated();
+            game.resetAllHasGuessed();
+            gameRepository.save(game);
+            gameRepository.flush();
+            return true;
+        }
+        else{
+            game.resetAllHasGuessed();
+            game.resetAllHasCreated();
+            game.setWinner();
+            game.setAllPlayerStatusToFinished();
+            gameRepository.save(game);
+            gameRepository.flush();
+            return false;
+        }
     }
-
-
-
-
-
-
-
-
 
 
 }

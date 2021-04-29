@@ -120,7 +120,7 @@ public class LobbyService {
             String baseErrorMessage = "The lobby you want to join is full. Find another Lobby!";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, baseErrorMessage);
         }
-
+        userToJoin.setPlayerStatus(PlayerStatus.JOINED);
         lobbyToJoin.addPlayerToPlayersInLobby(userToJoin);
         lobbyToJoin.increaseNumbersOfPlayers();
 

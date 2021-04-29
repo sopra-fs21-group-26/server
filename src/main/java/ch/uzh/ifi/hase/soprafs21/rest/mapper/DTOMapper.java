@@ -50,8 +50,8 @@ public interface DTOMapper {
     @Mapping(source = "scoreSheet", target = "scoreSheet")
     GameGetScoreSheetDTO convertEntityToGameGetScoreSheetDTO(ScoreSheet scoreSheet);
 
-    @Mapping(source = "setList", target = "setList")
-    GameGetSetsDTO convertEntityToGameGetSetsDTO(SetList setList);
+    /*@Mapping(source = "setList", target = "setList")
+    GameGetSetsDTO convertEntityToGameGetSetsDTO(SetList setList);*/
     
     @Mapping(source = "token", target = "token")
     @Mapping(source = "id", target = "id")

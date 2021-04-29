@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 
 import javax.persistence.*;
@@ -38,20 +39,61 @@ public class Game implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private ScoreSheet scoreSheet;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private SetList setList;
+    /*@OneToOne(cascade = CascadeType.ALL)
+    private SetList setList;*/
 
     @Column
     private int gameRound;
+
 
     public Game() {
     }
 
     public Game(long lobbyId, List<User> players) {
         this.scoreSheet = new ScoreSheet(players);
-        this.setList = new SetList((UserRepository) players);
+        //this.setList = new SetList((UserRepository) players);
         this.gameId = lobbyId;
         this.picturesonGrid = new ArrayList<>();
+    }
+
+    public void setAllPlayerStatusToPlaying(){
+        for (User user : this.playersInGame){
+            user.setPlayerStatus(PlayerStatus.PLAYING);
+        }
+    }
+
+    public void increaseGameRound(){
+        this.setGameRound(this.getGameRound()+1);
+    }
+
+    public void resetAllHasGuessed(){
+        for (User user: this.playersInGame){
+            user.setHasGuessed(false);
+        }
+
+    }
+
+    public void resetAllHasCreated(){
+        for (User user: this.playersInGame){
+            user.setHasCreated(false);
+        }
+    }
+
+    public void setWinner(){
+        User winner = new User();
+        winner.setPoints(0);
+        for (User user : this.playersInGame){
+            if (user.getPoints() > winner.getPoints()){
+                winner = user;
+            }
+        }
+        winner.setGamesWon(winner.getGamesWon()+1);
+    }
+
+    public void setAllPlayerStatusToFinished(){
+        for (User user: this.playersInGame){
+            user.setPlayerStatus(PlayerStatus.FINISHED);
+        }
     }
 
     public int getGameRound() {
@@ -117,12 +159,12 @@ public class Game implements Serializable {
         return this.scoreSheet;
     }
 
-    public SetList getSetList() {
+    /*public SetList getSetList() {
         return this.setList;
     }
 
     public void rotateSets() {
         this.setList.rotateSetList();
-    }
+    }*/
 
 }
