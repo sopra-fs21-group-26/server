@@ -169,6 +169,7 @@ public class LobbyService {
         if (userToLeave.getToken().equals(lobby.getAdmin().getToken())){
             lobbyRepository.delete(lobby);
             lobbyRepository.flush();
+
         }
 
         if (lobby.getNumbersOfPlayers() == 1){

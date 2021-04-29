@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PictureRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,13 +30,16 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final PictureRepository pictureRepository;
 
 
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
-                       @Qualifier("userRepository") UserRepository userRepository) {
+                       @Qualifier("userRepository") UserRepository userRepository,
+                       @Qualifier("pictureRepository") PictureRepository pictureRepository) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
+        this.pictureRepository = pictureRepository;
     }
 
 
@@ -59,7 +63,8 @@ public class GameService {
         for (int i = 0; i < UnsplashArray.size(); i++) {
             JSONObject obj1 = (JSONObject) UnsplashArray.get(i);
             JSONObject imgURLs = (JSONObject) obj1.get("urls");
-            PictureList.add(new Picture((String) imgURLs.get("raw"), i));
+            Picture temp = new Picture((String) imgURLs.get("raw"),i);
+            PictureList.add(temp);
         }
         for (int i = 0; i < PictureList.size(); i++) {
             PictureList.get(i).setId((long) i);
@@ -125,6 +130,9 @@ public class GameService {
 
 
         }
+        for (int i = 0; i < PictureList.size(); i++){
+            pictureRepository.saveAndFlush(PictureList.get(i));
+        }
         Game game = gameRepository.findByGameId(gameID);
         game.setPicturesonGrid(PictureList);
         gameRepository.save(game);
@@ -143,7 +151,7 @@ public class GameService {
 
     public List<Picture> getGrid(long gameID) throws IOException, ParseException {
         Game game = gameRepository.findByGameId(gameID);
-        if(game.getPicturesonGrid()==null){
+        if(game.getPicturesonGrid()==null || game.getPicturesonGrid().isEmpty()){
             List<Picture> PictureList = makeGrid(gameID);
             return PictureList;
         }
@@ -233,6 +241,22 @@ public class GameService {
         }
 
     }
+
+    public void saveCreation(User user, String recreation1){
+        User userToSaveRecreation = userRepository.findByToken(user.getToken());
+
+        if (userToSaveRecreation == null){
+            String baseErrorMessage = "User with token was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        Picture recreation = new Picture();
+        recreation.setUrl(recreation1);
+        userToSaveRecreation.setRecreatedPicture(recreation);
+    }
+
+
+
 
     public boolean haveAllCreated(long gameId){
         Game game = gameRepository.findByGameId(gameId);

@@ -44,6 +44,12 @@ public class GameController {
             return Pictures;
 
     }
+/*    @GetMapping("/game/grid")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<PictureGetDTO> testGetGrid(){
+        List<Picture> testGrid = gameService.makeGrid;
+    }*/
 
     @GetMapping("/games/{gameID}/score")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
@@ -54,6 +60,8 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToGameGetScoreSheetDTO(scoreSheet);
     }
 
+
+    //returns PictureGetDTO of random picture
     @GetMapping("/games/{gameId}/picture")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -70,6 +78,7 @@ public class GameController {
         return userService.addPoint(playerID);
     }
 
+    //returns guessScreenGetDTO of all players in lobby except "yourself" (list with username and list with string of recreated picture)
     @PutMapping("/games/guessScreen/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -79,6 +88,7 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToGuessScreenGetDTO(guessScreen);
     }
 
+    //adds the points to the user corresponding to his guess, need: token of logged in user and username that he guessed picture of
     @PutMapping("/games/correctGuess/{gameId}/{coordinate}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -87,6 +97,25 @@ public class GameController {
         gameService.checkIfGuessCorrect(gameId, coordinate, user);
     }
 
+    //save recreated picture as string in user.recreatedPicture.url --> after recreating: this request first to save
+    //then games/creation to set hascreated = true --> then get to see if all havecreated their picture --> if yes continue
+
+    @PutMapping("games/saveCreation/{recreation}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void saveCreation(@RequestBody UserPutTokenDTO userPutTokenDTO, @PathVariable String recreation){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        gameService.saveCreation(user, recreation);
+    }
+
+
+
+
+
+
+
+
+    //after creating sets hascreated=true to see that he is ready for guessScreen
     @PutMapping("games/creation")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -95,6 +124,7 @@ public class GameController {
         userService.setHasCreated(user);
     }
 
+    //returns true if all users have created picture to continue to guessscreen
     @GetMapping("games/allCreated/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -103,6 +133,8 @@ public class GameController {
         return haveAllCreated;
     }
 
+
+    //sets hasguessed = true if user has guessed all guesses to continue to next round
     @PutMapping("games/guess")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -111,6 +143,8 @@ public class GameController {
         userService.setHasGuessed(user);
     }
 
+
+    //returns true if all users have guessed all guesses to continue to next round
     @GetMapping("games/allGuessed/{gameId}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -128,6 +162,9 @@ public class GameController {
         sets.rotateSetList();
         return DTOMapper.INSTANCE.convertEntityToGameGetSetsDTO(sets);
     }
+
+
+
 
 
     //To do: return true false if it was last round (one Mapping)
