@@ -62,7 +62,7 @@ public class GameController {
 
 
     //returns PictureGetDTO of random picture
-    @GetMapping("/games/{gameId}/picture")
+    @PutMapping("/games/{gameId}/picture")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public PictureGetDTO getRandomPicture(@RequestBody UserPutTokenDTO userPutTokenDTO, @PathVariable long gameId) {
