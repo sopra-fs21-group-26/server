@@ -31,7 +31,8 @@ public class Game implements Serializable {
     @Column
     private int numbersOfPlayers;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn()
     private List<Picture> picturesonGrid;
 
     @OneToOne(cascade = CascadeType.ALL)

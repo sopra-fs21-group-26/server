@@ -43,6 +43,12 @@ public class GameController {
             return Pictures;
 
     }
+/*    @GetMapping("/game/grid")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<PictureGetDTO> testGetGrid(){
+        List<Picture> testGrid = gameService.makeGrid;
+    }*/
 
     @GetMapping("/games/{gameID}/score")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
