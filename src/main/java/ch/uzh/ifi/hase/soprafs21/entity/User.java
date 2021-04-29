@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
+import ch.uzh.ifi.hase.soprafs21.constant.Set;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -78,6 +79,9 @@ public class User implements Serializable {
 
     @Column
     private boolean hasGuessed;
+
+    @Column
+    private Set activeSet;
 
     public boolean isHasGuessed() {
         return hasGuessed;
@@ -252,4 +256,11 @@ public class User implements Serializable {
         return this.score;
     }
 
+    public Set getActiveSet() {
+        return this.activeSet;
+    }
+
+    public void setActiveSet(Set activeSet) {
+        this.activeSet = activeSet;
+    }
 }

@@ -3,8 +3,6 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
 
 @Entity
@@ -37,6 +35,9 @@ public class Game implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private ScoreSheet scoreSheet;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private SetList setList;
+
     @Column
     private int gameRound;
 
@@ -45,6 +46,7 @@ public class Game implements Serializable {
 
     public Game(long lobbyId, List<User> players) {
         this.scoreSheet = new ScoreSheet(players);
+        this.setList = new SetList(userRepository, players);
         this.gameId = lobbyId;
         this.picturesonGrid = new ArrayList<>();
     }
@@ -110,6 +112,10 @@ public class Game implements Serializable {
     public ScoreSheet getScoreSheet(){
         this.scoreSheet.updateScoreSheet();
         return this.scoreSheet;
+    }
+
+    public SetList getSetList() {
+        return this.setList;
     }
 
 }
