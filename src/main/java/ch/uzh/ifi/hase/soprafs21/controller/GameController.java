@@ -158,8 +158,7 @@ public class GameController {
     @ResponseBody
     public GameGetSetsDTO rotateSets(@PathVariable long gameID) throws IOException, ParseException {
         Game game = gameService.getGame(gameID);
-        SetList sets = game.getSetList();
-        sets.rotateSetList();
+        SetList sets = gameService.rotateSets(game);
         return DTOMapper.INSTANCE.convertEntityToGameGetSetsDTO(sets);
     }
 

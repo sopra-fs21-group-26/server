@@ -96,7 +96,7 @@ public class SetList implements Serializable {
 
     }
 
-    public Hashtable<String, Set> getScoreSheet() {
+    public Hashtable<String, Set> getSetList() {
         return this.setList;
     }
 }

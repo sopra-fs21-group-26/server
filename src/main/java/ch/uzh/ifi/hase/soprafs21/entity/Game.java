@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class Game implements Serializable {
 
     public Game(long lobbyId, List<User> players) {
         this.scoreSheet = new ScoreSheet(players);
-        this.setList = new SetList(userRepository, players);
+        this.setList = new SetList((UserRepository) players);
         this.gameId = lobbyId;
         this.picturesonGrid = new ArrayList<>();
     }
@@ -117,6 +119,10 @@ public class Game implements Serializable {
 
     public SetList getSetList() {
         return this.setList;
+    }
+
+    public void rotateSets() {
+        this.setList.rotateSetList();
     }
 
 }

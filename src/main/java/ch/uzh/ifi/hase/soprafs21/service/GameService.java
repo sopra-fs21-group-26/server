@@ -296,6 +296,14 @@ public class GameService {
     }
 
 
+    public SetList rotateSets(Game game) {
+        SetList sets = game.getSetList();
+        game.rotateSets();
+        gameRepository.save(game);
+        gameRepository.flush();
+        return sets;
+    }
+
 
 
 
