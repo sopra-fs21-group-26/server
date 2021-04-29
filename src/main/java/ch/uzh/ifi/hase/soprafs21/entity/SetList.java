@@ -79,18 +79,21 @@ public class SetList implements Serializable {
                 temp = oldSet;
             }
         }
-        Set temp = inactiveSets.remove();
-        for (User player : this.players){
-            Set oldSet = player.getActiveSet();
-            String name = player.getUsername();
-            player.setActiveSet(temp);
-            userRepository.save(player);
-            userRepository.flush();
-            Set set = player.getActiveSet();
-            this.setList.put(name, set);
-            temp = oldSet;
+        else {
+            Set temp = inactiveSets.remove();
+            for (User player : this.players){
+                Set oldSet = player.getActiveSet();
+                String name = player.getUsername();
+                player.setActiveSet(temp);
+                userRepository.save(player);
+                userRepository.flush();
+                Set set = player.getActiveSet();
+                this.setList.put(name, set);
+                temp = oldSet;
+            }
+            inactiveSets.add(temp);
         }
-        inactiveSets.add(temp);
+
     }
 
     public Hashtable<String, Set> getScoreSheet() {
