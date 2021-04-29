@@ -96,6 +96,24 @@ public class GameController {
         gameService.checkIfGuessCorrect(gameId, coordinate, user);
     }
 
+    //save recreated picture as string in user.recreatedPicture.url --> after recreating: this request first to save
+    //then games/creation to set hascreated = true --> then get to see if all havecreated their picture --> if yes continue
+
+    @PutMapping("games/saveCreation/{recreation}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void saveCreation(@RequestBody UserPutTokenDTO userPutTokenDTO, @PathVariable String recreation){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        gameService.saveCreation(user, recreation);
+    }
+
+
+
+
+
+
+
+
     //after creating sets hascreated=true to see that he is ready for guessScreen
     @PutMapping("games/creation")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
@@ -137,7 +155,7 @@ public class GameController {
 
 
 
-    
+
     //To do: return true false if it was last round (one Mapping)
     //To do:
 }

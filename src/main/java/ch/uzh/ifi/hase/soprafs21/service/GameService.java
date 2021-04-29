@@ -242,6 +242,22 @@ public class GameService {
 
     }
 
+    public void saveCreation(User user, String recreation1){
+        User userToSaveRecreation = userRepository.findByToken(user.getToken());
+
+        if (userToSaveRecreation == null){
+            String baseErrorMessage = "User with token was not found!";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, baseErrorMessage);
+        }
+
+        Picture recreation = new Picture();
+        recreation.setUrl(recreation1);
+        userToSaveRecreation.setRecreatedPicture(recreation);
+    }
+
+
+
+
     public boolean haveAllCreated(long gameId){
         Game game = gameRepository.findByGameId(gameId);
         boolean haveAllCreated;
