@@ -179,6 +179,7 @@ public class GameService {
         Random rand = new Random();
 
         Picture randomPicture = pictures.get(rand.nextInt(pictures.size()));
+        userToAssignCoordinate.setCurrentlyCreating(randomPicture);
         userToAssignCoordinate.setOwnPictureCoordinate(randomPicture.getCoordinate());
         return randomPicture;
     }
