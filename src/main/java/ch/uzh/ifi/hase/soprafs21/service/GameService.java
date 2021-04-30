@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PictureRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.json.simple.JSONArray;
@@ -31,15 +32,18 @@ public class GameService {
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
     private final PictureRepository pictureRepository;
+    private final LobbyRepository lobbyRepository;
 
 
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
                        @Qualifier("userRepository") UserRepository userRepository,
-                       @Qualifier("pictureRepository") PictureRepository pictureRepository) {
+                       @Qualifier("pictureRepository") PictureRepository pictureRepository,
+                       @Qualifier("lobbyRepository") LobbyRepository lobbyRepository) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
         this.pictureRepository = pictureRepository;
+        this.lobbyRepository = lobbyRepository;
     }
 
 
@@ -298,6 +302,62 @@ public class GameService {
     }
 
 
+    //Put Mapping, i get token, gameId, --> set user isreadyForNextRound to true --> check if all are ready for next round --> save in lobbyobj new variable, increase gameRound
+    //--> is there a next round? (gameRound=6) --> save in lobby
+    //--> next round yes: Put Mapping /prepareNextRound (i get gameId) -> set allPlayerStatus to playing, reset...
+
+    public void readyForNextRound(User user, long gameId){
+        User userToMakeReadyForNextRound = userRepository.findByToken(user.getToken());
+        Game game = gameRepository.findByGameId(gameId);
+        Lobby lobby = lobbyRepository.findByLobbyId(gameId);
+
+        userToMakeReadyForNextRound.setReadyForNextRound(true);
+        userRepository.save(userToMakeReadyForNextRound);
+        userRepository.flush();
+
+        for (User player : game.getPlayersInGame()){
+            if (!player.isReadyForNextRound()){
+                return;
+            }
+        }
+        lobby.setAllAreReadyForNextRound(true);
+        if (game.getGameRound() <=5){
+            game.increaseGameRound();
+            lobby.setIsEndGame(false);
+        }
+        else{
+            game.setWinner();
+            game.setAllPlayerStatusToFinished();
+            lobby.setIsEndGame(true);
+        }
+
+        lobbyRepository.save(lobby);
+        lobbyRepository.flush();
+        gameRepository.save(game);
+        gameRepository.flush();
+    }
+
+    public void prepareForNextRound(long gameId){
+        Game game = gameRepository.findByGameId(gameId);
+        Lobby lobby = lobbyRepository.findByLobbyId(gameId);
+
+        game.resetAllHasCreated();
+        game.resetAllHasGuessed();
+        game.resetAllAreReadyForNextRound();
+        game.setAllPlayerStatusToPlaying();
+        lobby.setAllAreReadyForNextRound(false);
+        lobby.setIsEndGame(false);
+        gameRepository.save(game);
+        gameRepository.flush();
+        lobbyRepository.save(lobby);
+        lobbyRepository.flush();
+    }
+
+
+
+
+
+
     /*public SetList rotateSets(Game game) {
         SetList sets = game.getSetList();
         game.rotateSets();
@@ -307,7 +367,7 @@ public class GameService {
     }*/
 
     //next round:
-    public boolean isNextRound(long gameId){
+    /*public boolean isNextRound(long gameId){
         Game game = gameRepository.findByGameId(gameId);
 
         if (game.getGameRound() != 5){
@@ -328,6 +388,12 @@ public class GameService {
             gameRepository.flush();
             return false;
         }
+    }*/
+
+    //For testing
+    public Picture getPictureOfUser(User user){
+        User user2 = userRepository.findByToken(user.getToken());
+        return user2.getCurrentlyCreating();
     }
 
 

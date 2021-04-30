@@ -79,6 +79,12 @@ public class Game implements Serializable {
         }
     }
 
+    public void resetAllAreReadyForNextRound(){
+        for (User user: this.playersInGame){
+            user.setReadyForNextRound(false);
+        }
+    }
+
     public void setWinner(){
         User winner = new User();
         winner.setPoints(0);

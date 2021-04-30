@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Picture;
 
 public class UserGetDTO {
 
@@ -10,6 +11,7 @@ public class UserGetDTO {
     private OnlineStatus status;
     private String token;
     private PlayerStatus playerStatus;
+
 
 
 

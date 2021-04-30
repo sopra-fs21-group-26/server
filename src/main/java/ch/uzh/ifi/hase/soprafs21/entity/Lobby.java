@@ -38,6 +38,33 @@ public class Lobby implements Serializable {
     @Column(nullable = false)
     private int numbersOfPlayers;
 
+    @Column
+    private boolean isEndGame;
+
+    @Column
+    private boolean allAreReadyForNextRound;
+
+    public boolean isAllAreReadyForNextRound() {
+        return allAreReadyForNextRound;
+    }
+
+    public boolean getIsEndGame() {
+        return isEndGame;
+    }
+
+    public void setAllAreReadyForNextRound(boolean allAreReadyForNextRound) {
+        this.allAreReadyForNextRound = allAreReadyForNextRound;
+    }
+
+    public void setIsEndGame(boolean endGame) {
+        isEndGame = endGame;
+    }
+
+
+
+
+
+
 
     public boolean checkIfAllAreReady(){
         boolean isReady = false;

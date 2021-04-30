@@ -72,6 +72,17 @@ public class GameController {
         return DTOMapper.INSTANCE.convertEntityToPictureGetDTO(picture);
     }
 
+    //For testing
+    @PutMapping("/games/pictures")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public PictureGetDTO getPictureOfUser(@RequestBody UserPutTokenDTO userPutTokenDTO) {
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        Picture picture = gameService.getPictureOfUser(user);
+        return DTOMapper.INSTANCE.convertEntityToPictureGetDTO(picture);
+    }
+
+
     @PutMapping("/games/points/{playerID}")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
@@ -166,13 +177,41 @@ public class GameController {
     //if no:
     //return false, increase winners gameWon, set playerstatus, reset hascreated etc.
 
-    @GetMapping("/games/{gameId}/nextRound")
+
+    //Put Mapping, i get token, gameId, --> set user isreadyForNextRound to true --> check if all are ready for next round --> save in lobbyobj new variable, increase gameRound
+    //--> is there a next round? (gameRound=6) --> save in lobby
+    //--> next round yes: Put Mapping /prepareNextRound (i get gameId)
+
+    @PutMapping("/games/{gameId}/ready-for-next-round")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void readyForNextRound(@RequestBody UserPutTokenDTO userPutTokenDTO, @PathVariable long gameId){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        gameService.readyForNextRound(user, gameId);
+    }
+
+    @PutMapping("/games/preparation-next-round/{gameId}")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void prepareForNextRound(@PathVariable long gameId){
+        gameService.prepareForNextRound(gameId);
+    }
+
+
+
+
+
+
+
+
+
+  /*  @GetMapping("/games/{gameId}/nextRound")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public boolean isNextRound (@PathVariable long gameId){
         boolean isNextRound = gameService.isNextRound(gameId);
         return isNextRound;
-    }
+    }*/
 
 
 

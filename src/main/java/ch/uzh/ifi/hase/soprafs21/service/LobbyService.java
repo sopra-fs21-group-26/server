@@ -71,6 +71,8 @@ public class LobbyService {
         lobby.setNumbersOfPlayers(1);
         lobby.setPlayersInLobby(playersInLobby);
         lobby.setLobbyStatus(LobbyStatus.WAITING);
+        lobby.setAllAreReadyForNextRound(false);
+        lobby.setIsEndGame(false);
 
         lobby = lobbyRepository.save(lobby);
         lobbyRepository.flush();
@@ -330,6 +332,8 @@ public class LobbyService {
         game.setNumbersOfPlayers(lobby.getNumbersOfPlayers());
         game.setPlayersInGame(lobby.getPlayersInLobby());
         game.setGameRound(1);
+        game.resetAllHasCreated();
+        game.resetAllHasCreated();
 
         gameRepository.save(game);
         gameRepository.flush();

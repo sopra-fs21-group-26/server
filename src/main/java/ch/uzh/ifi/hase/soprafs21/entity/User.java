@@ -81,6 +81,17 @@ public class User implements Serializable {
     private boolean hasGuessed;
 
     @Column
+    private boolean isReadyForNextRound;
+
+    public boolean isReadyForNextRound() {
+        return isReadyForNextRound;
+    }
+
+    public void setReadyForNextRound(boolean readyForNextRound) {
+        isReadyForNextRound = readyForNextRound;
+    }
+
+    @Column
     //private Set activeSet;
 
     public boolean isHasGuessed() {

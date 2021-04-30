@@ -11,6 +11,25 @@ public class LobbyGetDTO {
     private int numbersOfPlayers;
     private UserGetDTO admin;
     private List<UserGetDTO> playersInLobby;
+    private boolean allAreReadyForNextRound;
+    private boolean isEndGame;
+
+    public boolean isAllAreReadyForNextRound() {
+        return allAreReadyForNextRound;
+    }
+
+    public void setAllAreReadyForNextRound(boolean allAreReadyForNextRound) {
+        this.allAreReadyForNextRound = allAreReadyForNextRound;
+    }
+
+    public void setIsEndGame(boolean endGame) {
+        isEndGame = endGame;
+    }
+
+    public boolean getIsEndGame() {
+        return isEndGame;
+    }
+
 
     //For testing
     private Long lobbyId;
