@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -100,11 +101,13 @@ public class GameController {
     //save recreated picture as string in user.recreatedPicture.url --> after recreating: this request first to save
     //then games/creation to set hascreated = true --> then get to see if all havecreated their picture --> if yes continue
 
-    @PutMapping("games/saveCreation/{recreation}")
+    @PutMapping("games/saveCreation")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
-    public void saveCreation(@RequestBody UserPutTokenDTO userPutTokenDTO, @PathVariable String recreation){
-        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+    public void saveCreation(@RequestBody Map<String,String> map){
+        String token = map.get("token");
+        String recreation = map.get("recreation");
+        User user = userService.getSingleUserByToken(token);
         gameService.saveCreation(user, recreation);
     }
 
