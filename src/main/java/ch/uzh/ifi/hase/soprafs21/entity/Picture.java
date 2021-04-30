@@ -11,7 +11,7 @@ public class Picture {
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(length = 500000000)
     private String Url;
 
     @Column
