@@ -165,6 +165,10 @@ public class Game implements Serializable {
         return this.scoreSheet;
     }
 
+    public void setScoreSheet(ScoreSheet scoreSheet){
+        this.scoreSheet = scoreSheet;
+    }
+
     /*public SetList getSetList() {
         return this.setList;
     }
