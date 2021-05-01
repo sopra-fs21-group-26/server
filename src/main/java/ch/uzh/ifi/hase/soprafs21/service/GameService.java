@@ -247,6 +247,7 @@ public class GameService {
 
             ScoreSheet scoreSheet = new ScoreSheet(game.getPlayersInGame());
             game.setScoreSheet(scoreSheet);
+            gameRepository.saveAndFlush(game);
         }
 
     }
