@@ -161,7 +161,8 @@ public class GameService {
             return PictureList;
         }
         else{
-            return game.getPicturesonGrid();
+            List<Picture> grid = game.getPicturesonGrid();
+            return grid;
         }
     }
 
