@@ -197,6 +197,15 @@ public class GameController {
         gameService.prepareForNextRound(gameId);
     }
 
+    @PutMapping("/games/{gameId}/end-game")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public void endGame(@PathVariable long gameId, @PathVariable UserPutTokenDTO userPutTokenDTO){
+        User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
+        gameService.endGame(user, gameId);
+    }
+
+
 
 
 

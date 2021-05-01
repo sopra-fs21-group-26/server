@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
@@ -352,6 +353,33 @@ public class GameService {
         gameRepository.flush();
         lobbyRepository.save(lobby);
         lobbyRepository.flush();
+    }
+
+    public void endGame(User user, long gameId){
+        User userWhoFinishedGame = userRepository.findByToken(user.getToken());
+        Game gameToFinish = gameRepository.findByGameId(gameId);
+        Lobby lobbyToFinish = lobbyRepository.findByLobbyId(gameId);
+
+        userWhoFinishedGame.setReadyForNextRound(false);
+        userWhoFinishedGame.setPlayerStatus(PlayerStatus.FINISHED);
+        userWhoFinishedGame.setHasCreated(false);
+        userWhoFinishedGame.setHasGuessed(false);
+
+        if (userWhoFinishedGame.getToken().equals(lobbyToFinish.getAdmin().getToken())){
+            lobbyToFinish.setAdmin(null);
+            gameToFinish.setAdmin(null);
+        }
+
+        lobbyToFinish.getPlayersInLobby().remove(userWhoFinishedGame);
+        gameToFinish.getPlayersInGame().remove(userWhoFinishedGame);
+
+        if (lobbyToFinish.getPlayersInLobby().size() == 0){
+            lobbyRepository.deleteById(lobbyToFinish.getLobbyId());
+            lobbyRepository.flush();
+            gameRepository.deleteById(gameId);
+            gameRepository.flush();
+        }
+
     }
 
 

@@ -32,7 +32,7 @@ public class Lobby implements Serializable {
     private LobbyStatus lobbyStatus;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn (nullable = false)
+    @JoinColumn ()
     private User admin;
 
     @Column(nullable = false)
