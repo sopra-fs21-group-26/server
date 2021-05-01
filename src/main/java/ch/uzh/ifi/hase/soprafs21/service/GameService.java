@@ -322,7 +322,7 @@ public class GameService {
             }
         }
         lobby.setAllAreReadyForNextRound(true);
-        if (game.getGameRound() <=5){
+        if (game.getGameRound() <=4){
             game.increaseGameRound();
             lobby.setIsEndGame(false);
         }
