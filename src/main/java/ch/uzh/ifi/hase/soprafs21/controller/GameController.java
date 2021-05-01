@@ -200,10 +200,22 @@ public class GameController {
     @PutMapping("/games/{gameId}/end-game")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
-    public void endGame(@PathVariable long gameId, @PathVariable UserPutTokenDTO userPutTokenDTO){
+    public void endGame(@PathVariable long gameId, @RequestBody UserPutTokenDTO userPutTokenDTO){
         User user = DTOMapper.INSTANCE.convertUserPutTokenDTOtoEntity(userPutTokenDTO);
         gameService.endGame(user, gameId);
     }
+
+
+    //returns false if no grid, true if there is a grid
+    @PutMapping("/games/{gameId}/is-grid")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public boolean hasGrid(@PathVariable long gameId){
+        boolean hasGrid = gameService.hasGrid(gameId);
+        return hasGrid;
+    }
+
+
 
 
 

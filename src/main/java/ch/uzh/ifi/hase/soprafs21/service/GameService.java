@@ -367,19 +367,37 @@ public class GameService {
         userWhoFinishedGame.setHasGuessed(false);
 
         if (userWhoFinishedGame.getToken().equals(lobbyToFinish.getAdmin().getToken())){
-            lobbyToFinish.setAdmin(null);
-            gameToFinish.setAdmin(null);
+
+            if (lobbyToFinish.getPlayersInLobby().size() == 1){
+                lobbyToFinish.setAdmin(null);
+                gameToFinish.setAdmin(null);
+                lobbyToFinish.setPlayersInLobby(null);
+                gameToFinish.setPlayersInGame(null);
+                lobbyRepository.deleteById(lobbyToFinish.getLobbyId());
+                lobbyRepository.flush();
+                gameRepository.deleteById(gameId);
+                gameRepository.flush();
+                return;
+            }
+            else{
+                lobbyToFinish.deletePlayerInPlayersInLobby(userWhoFinishedGame);
+                gameToFinish.deletePlayerInGame(userWhoFinishedGame);
+                lobbyToFinish.setAdmin(lobbyToFinish.getPlayersInLobby().get(0));
+                gameToFinish.setAdmin(lobbyToFinish.getPlayersInLobby().get(0));
+                lobbyRepository.save(lobbyToFinish);
+                lobbyRepository.flush();
+                gameRepository.save(gameToFinish);
+                gameRepository.flush();
+                return;
+            }
         }
 
-        lobbyToFinish.getPlayersInLobby().remove(userWhoFinishedGame);
-        gameToFinish.getPlayersInGame().remove(userWhoFinishedGame);
-
-        if (lobbyToFinish.getPlayersInLobby().size() == 0){
-            lobbyRepository.deleteById(lobbyToFinish.getLobbyId());
-            lobbyRepository.flush();
-            gameRepository.deleteById(gameId);
-            gameRepository.flush();
-        }
+        lobbyToFinish.deletePlayerInPlayersInLobby(userWhoFinishedGame);
+        gameToFinish.deletePlayerInGame(userWhoFinishedGame);
+        lobbyRepository.save(lobbyToFinish);
+        lobbyRepository.flush();
+        gameRepository.save(gameToFinish);
+        gameRepository.flush();
 
     }
 
@@ -424,6 +442,16 @@ public class GameService {
     public Picture getPictureOfUser(User user){
         User user2 = userRepository.findByToken(user.getToken());
         return user2.getCurrentlyCreating();
+    }
+
+    public boolean hasGrid(long gameId){
+        Game game = gameRepository.findByGameId(gameId);
+        if (game.getPicturesonGrid() == null){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
 
