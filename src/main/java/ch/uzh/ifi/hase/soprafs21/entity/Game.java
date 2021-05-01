@@ -66,6 +66,13 @@ public class Game implements Serializable {
         this.setGameRound(this.getGameRound()+1);
     }
 
+    public void deletePlayerInGame(User user){
+        List<User> oldPlayersInGame = this.getPlayersInGame();
+        oldPlayersInGame.remove(user);
+        List <User> newPlayersInLobby = oldPlayersInGame;
+        this.setPlayersInGame(newPlayersInLobby);
+    }
+
     public void resetAllHasGuessed(){
         for (User user: this.playersInGame){
             user.setHasGuessed(false);
