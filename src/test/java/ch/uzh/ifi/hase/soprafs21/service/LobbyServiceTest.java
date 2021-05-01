@@ -46,49 +46,32 @@ public class LobbyServiceTest {
     }
 
 
-    @Test
-    public void createLobby_validInputs_success(){
-        Lobby lobbyTest = new Lobby();
-        User admin = new User();
-        admin.setCreatedOn();
-        admin.setUsername("TestUsername");
-        admin.setToken("TestToken");
-        admin.setOnlineStatus(OnlineStatus.ONLINE);
-        admin.setPassword("TestPassword");
-        admin.setPoints(0);
-        List<User> users = new ArrayList<>();
-        users.add(admin);
-        userRepository.save(admin);
-
-        lobbyTest.setPlayersInLobby(users);
-        lobbyTest.setLobbyId((long) 2);
-        lobbyTest.setAdmin(admin);
-        lobbyTest.setLobbyStatus(LobbyStatus.WAITING);
-        lobbyTest.setNumbersOfPlayers(1);
-        lobbyTest.setLobbyName("TestLobby");
-
-        Lobby createdLobby = lobbyService.createLobby(lobbyTest.getLobbyName(), admin);
-
-        assertEquals(lobbyTest.getLobbyId(), createdLobby.getLobbyId());
+//    @Test
+//    public void createLobby_validInputs_success(){
+//        Lobby lobbyTest = new Lobby();
+//        User admin = new User();
+//        admin.setCreatedOn();
+//        admin.setUsername("TestUsername");
+//        admin.setToken("TestToken");
+//        admin.setOnlineStatus(OnlineStatus.ONLINE);
+//        admin.setPassword("TestPassword");
+//        admin.setPoints(0);
+//        List<User> users = new ArrayList<>();
+//        users.add(admin);
+//        userRepository.save(admin);
+//
+//        lobbyTest.setPlayersInLobby(users);
+//        lobbyTest.setLobbyId((long) 2);
+//        lobbyTest.setAdmin(admin);
+//        lobbyTest.setLobbyStatus(LobbyStatus.WAITING);
+//        lobbyTest.setNumbersOfPlayers(1);
+//        lobbyTest.setLobbyName("TestLobby");
+//
+//        Lobby createdLobby = lobbyService.createLobby(lobbyTest.getLobbyName(), admin);
+//
+//        assertEquals(lobbyTest.getLobbyId(), createdLobby.getLobbyId());
       /*  assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
         assertEquals(OnlineStatus.ONLINE, createdUser.getOnlineStatus());*/
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-
-
 
 }
