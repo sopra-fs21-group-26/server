@@ -425,6 +425,16 @@ public class GameService {
         return user2.getCurrentlyCreating();
     }
 
+    public boolean hasGrid(long gameId){
+        Game game = gameRepository.findByGameId(gameId);
+        if (game.getPicturesonGrid() == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 
 }
 
