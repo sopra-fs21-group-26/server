@@ -206,6 +206,18 @@ public class GameController {
     }
 
 
+    //returns false if no grid, true if there is a grid
+    @PutMapping("/games/{gameId}/is-grid")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public boolean hasGrid(@PathVariable long gameId){
+        boolean hasGrid = gameService.hasGrid(gameId);
+        return hasGrid;
+    }
+
+
+
+
 
 
 
