@@ -169,14 +169,27 @@ public class LobbyService {
         }
 
         if (userToLeave.getToken().equals(lobby.getAdmin().getToken())){
+
+            if(lobby.getPlayersInLobby().size() == 1){
+            userToLeave.setPlayerStatus(PlayerStatus.LEFT);
+            lobby.setAdmin(null);
+            lobby.setPlayersInLobby(null);
             lobbyRepository.delete(lobby);
             lobbyRepository.flush();
+            return;
+            }
+            else{
+                lobby.decreaseNumbersOfPlayers();
+                lobby.deletePlayerInPlayersInLobby(userToLeave);
+                userToLeave.setPlayerStatus(PlayerStatus.LEFT);
+                lobby.setAdmin(lobby.getPlayersInLobby().get(0));
+                lobbyRepository.save(lobby);
+                lobbyRepository.flush();
+                userRepository.save(userToLeave);
+                userRepository.flush();
+                return;
+            }
 
-        }
-
-        if (lobby.getNumbersOfPlayers() == 1){
-            lobbyRepository.delete(lobby);
-            lobbyRepository.flush();
         }
 
         if (lobby.getLobbyStatus() == LobbyStatus.FULL){
