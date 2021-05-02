@@ -1,3 +1,4 @@
+/*
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.constant.LobbyStatus;
@@ -24,13 +25,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+*/
 /**
  * Test class for the UserResource REST resource.
  *
  * @see UserService
- */
+ *//*
+
+*/
 /*@WebAppConfiguration
-@SpringBootTest*/
+@SpringBootTest*//*
+
 public class LobbyServiceTest {
 
     @Mock
@@ -93,7 +98,8 @@ public class LobbyServiceTest {
     }
 
 
-    @Test
+    */
+/*@Test
     public void createLobby_validInputs_success() {
         Lobby createdLobby = lobbyService.createLobby("TestName1", testUser);
 
@@ -110,9 +116,11 @@ public class LobbyServiceTest {
 
 
 
-    }
+    }*//*
+
 }
-        /*Lobby lobbyTest = new Lobby();
+        */
+/*Lobby lobbyTest = new Lobby();
         User admin = new User();
         admin.setCreatedOn();
         admin.setUsername("TestUsername");
@@ -133,9 +141,13 @@ public class LobbyServiceTest {
 
         Lobby createdLobby = lobbyService.createLobby(lobbyTest.getLobbyName(), admin);
 
-        assertEquals(lobbyTest.getLobbyId(), createdLobby.getLobbyId());*/
-      /*  assertEquals(testUser.getUsername(), createdUser.getUsername());
+        assertEquals(lobbyTest.getLobbyId(), createdLobby.getLobbyId());*//*
+
+      */
+/*  assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
-        assertEquals(OnlineStatus.ONLINE, createdUser.getOnlineStatus());*/
+        assertEquals(OnlineStatus.ONLINE, createdUser.getOnlineStatus());*//*
 
 
+
+*/
