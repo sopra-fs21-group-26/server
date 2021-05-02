@@ -30,6 +30,17 @@ public class GameController {
         this.userService = userService;
     }
 
+    @GetMapping("/games/{gameID}/grid/status")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public boolean getGridStatus(@PathVariable long gameID) throws IOException, ParseException {
+        Game game = gameService.getGame(gameID);
+        if(game.isGridStatus()){
+            return true;
+        }
+        return false;
+    }
+
 
 
 
@@ -44,6 +55,18 @@ public class GameController {
             }
             return Pictures;
 
+    }
+
+    @GetMapping("/games/{gameID}/grid/make")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public List<PictureGetDTO> makeGrid(@PathVariable long gameID) throws IOException, ParseException {
+        List<Picture> Grid = gameService.makeGrid(gameID);
+        List<PictureGetDTO> Pictures = new ArrayList<>();
+        for (int i = 0; i < Grid.size(); i++) {
+            Pictures.add(DTOMapper.INSTANCE.convertEntityToPictureGetDTO(Grid.get(i)));
+        }
+        return Pictures;
     }
 /*    @GetMapping("/game/grid")
     @ResponseStatus(HttpStatus.OK)

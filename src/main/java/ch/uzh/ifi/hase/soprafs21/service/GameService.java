@@ -49,6 +49,7 @@ public class GameService {
 
 
     public List<Picture> makeGrid(long gameID) throws IOException, ParseException {
+        Game game = gameRepository.findByGameId(gameID);
         String StringURL = "https://api.unsplash.com/photos/random/?count=16&client_id=3Sgz4djxGEDDUR3CiS6xSx_MKnU8PIYCdQOR8AkEHis";
         URL url = new URL(StringURL);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
@@ -65,70 +66,70 @@ public class GameService {
         JSONArray jarray = new JSONArray();
         jarray.add(obj);
         JSONArray UnsplashArray = (JSONArray) jarray.get(0);
-        for (int i = 0; i < UnsplashArray.size(); i++) {
+        for (int i = 0; i < 16; i++) {
             JSONObject obj1 = (JSONObject) UnsplashArray.get(i);
             JSONObject imgURLs = (JSONObject) obj1.get("urls");
-            Picture temp = new Picture((String) imgURLs.get("raw"),i);
+            Picture temp = new Picture((String) imgURLs.get("raw"), i);
             PictureList.add(temp);
         }
 
-        for (int i = 0; i < PictureList.size(); i++) {
-            PictureList.get(i).setId((long) i+4);
-            if(i<=3){
-                if(i%4==0){
+        for (int i = 0; i < 16; i++) {
+            // PictureList.get(i).setId((long) i+4);
+            if (i <= 3) {
+                if (i % 4 == 0) {
                     PictureList.get(i).setCoordinate("A1");
                 }
-                if(i%4==1){
+                if (i % 4 == 1) {
                     PictureList.get(i).setCoordinate("A2");
                 }
-                if(i%4==2){
+                if (i % 4 == 2) {
                     PictureList.get(i).setCoordinate("A3");
                 }
-                if(i%4==3){
+                if (i % 4 == 3) {
                     PictureList.get(i).setCoordinate("A4");
                 }
             }
-            else if(i<=7){
-                if(i%4==0){
+            else if (i <= 7) {
+                if (i % 4 == 0) {
                     PictureList.get(i).setCoordinate("B1");
                 }
-                if(i%4==1){
+                if (i % 4 == 1) {
                     PictureList.get(i).setCoordinate("B2");
                 }
-                if(i%4==2){
+                if (i % 4 == 2) {
                     PictureList.get(i).setCoordinate("B3");
                 }
-                if(i%4==3){
+                if (i % 4 == 3) {
                     PictureList.get(i).setCoordinate("B4");
                 }
 
             }
-            else if(i<=11){
-                if(i%4==0){
+            else if (i <= 11) {
+                if (i % 4 == 0) {
                     PictureList.get(i).setCoordinate("C1");
                 }
-                if(i%4==1){
+                if (i % 4 == 1) {
                     PictureList.get(i).setCoordinate("C2");
                 }
-                if(i%4==2){
+                if (i % 4 == 2) {
                     PictureList.get(i).setCoordinate("C3");
                 }
-                if(i%4==3){
+                if (i % 4 == 3) {
                     PictureList.get(i).setCoordinate("C4");
                 }
 
             }
-            else{
-                if(i%4==0){
+            else {
+                if (i % 4 == 0) {
                     PictureList.get(i).setCoordinate("D1");
                 }
-                if(i%4==1){
+                if (i % 4 == 1) {
                     PictureList.get(i).setCoordinate("D2");
                 }
-                if(i%4==2){
+                if (i % 4 == 2) {
                     PictureList.get(i).setCoordinate("D3");
                 }
-                if(i%4==3){
+                if (i % 4 == 3) {
                     PictureList.get(i).setCoordinate("D4");
                 }
 
@@ -136,15 +137,16 @@ public class GameService {
 
 
         }
-        for (int i = 0; i < PictureList.size(); i++){
+        for (int i = 0; i < 16; i++) {
             pictureRepository.saveAndFlush(PictureList.get(i));
         }
-        Game game = gameRepository.findByGameId(gameID);
         game.setPicturesonGrid(PictureList);
-        gameRepository.save(game);
-        gameRepository.flush();
+        game.setGridStatus(true);
+        gameRepository.saveAndFlush(game);
+        Game doneGame = gameRepository.findByGameId(gameID);
+        List<Picture> grid = doneGame.getPicturesonGrid();
 
-        return PictureList;
+        return grid;
     }
 
     public Game getGame(long id) {
@@ -157,14 +159,9 @@ public class GameService {
 
     public List<Picture> getGrid(long gameID) throws IOException, ParseException {
         Game game = gameRepository.findByGameId(gameID);
-        if(game.getPicturesonGrid()==null || game.getPicturesonGrid().isEmpty()){
-            List<Picture> PictureList = makeGrid(gameID);
-            return PictureList;
-        }
-        else{
-            List<Picture> grid = game.getPicturesonGrid();
-            return grid;
-        }
+        List<Picture> grid = game.getPicturesonGrid();
+        return grid;
+
     }
 
 

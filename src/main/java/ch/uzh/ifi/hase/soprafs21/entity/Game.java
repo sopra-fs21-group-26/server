@@ -32,6 +32,9 @@ public class Game implements Serializable {
     @Column
     private int numbersOfPlayers;
 
+    @Column
+    private boolean gridStatus;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn()
     private List<Picture> picturesonGrid;
@@ -54,6 +57,7 @@ public class Game implements Serializable {
         //this.setList = new SetList((UserRepository) players);
         this.gameId = lobbyId;
         this.picturesonGrid = new ArrayList<>();
+        this.gridStatus = false;
     }
 
     public void setAllPlayerStatusToPlaying(){
@@ -174,6 +178,14 @@ public class Game implements Serializable {
 
     public void setScoreSheet(ScoreSheet scoreSheet){
         this.scoreSheet = scoreSheet;
+    }
+
+    public boolean isGridStatus() {
+        return gridStatus;
+    }
+
+    public void setGridStatus(boolean gridStatus) {
+        this.gridStatus = gridStatus;
     }
 
     /*public SetList getSetList() {
