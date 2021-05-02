@@ -185,7 +185,7 @@ public class UserService {
             return false;
         }
     }
-
+//
     public User editUser(User user){
         User userToEdit = userRepository.findByToken(user.getToken());
 
