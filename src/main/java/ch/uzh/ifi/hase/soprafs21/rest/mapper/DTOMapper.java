@@ -33,7 +33,7 @@ public interface DTOMapper {
     UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "username", target = "username")
-  //  @Mapping(source = "score", target = "score")
+    @Mapping(source = "score", target = "score")
     @Mapping(source = "gamesWon", target = "gamesWon")
     @Mapping(source = "gamesPlayed", target = "gamesPlayed")
     UserGetProfileDTO convertEntityToUserGetProfileDTO(User user);

@@ -66,6 +66,7 @@ public class UserService {
         newUser.setOnlineStatus(OnlineStatus.ONLINE);
         newUser.setCreatedOn();
         newUser.resetPoints();
+        newUser.setScore(0);
 
         checkIfUserExists(newUser);
 

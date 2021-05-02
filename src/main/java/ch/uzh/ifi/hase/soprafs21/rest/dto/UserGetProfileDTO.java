@@ -7,6 +7,13 @@ public class UserGetProfileDTO {
     private int gamesPlayed;
     private int gamesWon;
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     public void setUsername(String username) {
         this.username = username;
