@@ -144,6 +144,16 @@ public class LobbyService {
         return lobbyRepository.findByLobbyId(lobbyId);
     }
 
+    public Lobby checkIfLobbynameExists(String lobbyname){
+        Lobby lobby = lobbyRepository.findByLobbyName(lobbyname);
+
+        String baseErrorMessage = "The %s provided %s not exist!";
+        if (lobby == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, "lobby", "does"));
+        }
+        return lobby;
+    }
+
     public void leaveLobby(Long lobbyId, User user){
         Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
         User userToLeave = userRepository.findByToken(user.getToken());

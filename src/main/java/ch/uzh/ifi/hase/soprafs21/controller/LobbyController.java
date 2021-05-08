@@ -127,6 +127,14 @@ public class LobbyController {
         lobbyService.startGame(lobbyId, userWhoWantsToStart);
     }
 
+    @GetMapping("/lobby/search/{lobbyname}")
+    @ResponseStatus(HttpStatus.OK) // 200 (as to REST specifications)
+    @ResponseBody
+    public LobbyGetDTO getSearchedLobby(@PathVariable String lobbyname){
+        Lobby lobby = lobbyService.checkIfLobbynameExists(lobbyname);
+        return LobbyDTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
+    }
+
 
 
 }
