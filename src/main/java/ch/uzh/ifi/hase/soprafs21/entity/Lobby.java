@@ -180,4 +180,11 @@ public class Lobby implements Serializable {
         this.setAllAreReadyForNextRound(false);
         this.setIsEndGame(false);
     }
+
+    public void setUpPlayerLeave(User userToLeave){
+        this.decreaseNumbersOfPlayers();
+        this.deletePlayerInPlayersInLobby(userToLeave);
+        this.setAdmin(this.getPlayersInLobby().get(0));
+    }
+
 }

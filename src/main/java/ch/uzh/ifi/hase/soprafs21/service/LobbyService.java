@@ -180,10 +180,11 @@ public class LobbyService {
             return;
             }
             else{
-                lobby.decreaseNumbersOfPlayers();
-                lobby.deletePlayerInPlayersInLobby(userToLeave);
                 userToLeave.setPlayerStatus(PlayerStatus.LEFT);
-                lobby.setAdmin(lobby.getPlayersInLobby().get(0));
+                lobby.setUpPlayerLeave(userToLeave);
+                /*lobby.decreaseNumbersOfPlayers();
+                lobby.deletePlayerInPlayersInLobby(userToLeave);
+                lobby.setAdmin(lobby.getPlayersInLobby().get(0));*/
                 lobbyRepository.save(lobby);
                 lobbyRepository.flush();
                 userRepository.save(userToLeave);
