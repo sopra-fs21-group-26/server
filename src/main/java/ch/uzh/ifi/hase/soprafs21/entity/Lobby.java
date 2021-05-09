@@ -170,4 +170,14 @@ public class Lobby implements Serializable {
     public void join(User user){
         this.playersInLobby.add(user);
     }
+
+    public void setLobbyUp(User admin, String lobbyName, List <User> playersInLobby){
+        this.setAdmin(admin);
+        this.setLobbyName(lobbyName);
+        this.setNumbersOfPlayers(1);
+        this.setPlayersInLobby(playersInLobby);
+        this.setLobbyStatus(LobbyStatus.WAITING);
+        this.setAllAreReadyForNextRound(false);
+        this.setIsEndGame(false);
+    }
 }

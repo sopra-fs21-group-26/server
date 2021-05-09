@@ -62,18 +62,9 @@ public class LobbyService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, baseErrorMessage);
             }
         }
-
         playersInLobby.add(admin1);
-
         admin1.setPlayerStatus(PlayerStatus.JOINED);
-        lobby.setAdmin(admin1);
-        lobby.setLobbyName(lobbyName);
-        lobby.setNumbersOfPlayers(1);
-        lobby.setPlayersInLobby(playersInLobby);
-        lobby.setLobbyStatus(LobbyStatus.WAITING);
-        lobby.setAllAreReadyForNextRound(false);
-        lobby.setIsEndGame(false);
-
+        lobby.setLobbyUp(admin1, lobbyName, playersInLobby);
         lobby = lobbyRepository.save(lobby);
         lobbyRepository.flush();
 

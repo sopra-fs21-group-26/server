@@ -11,6 +11,67 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+//Max' Implementation
+//SetList with all the sets, list with corresponding usernames, constructor sets up setlist (if game.setlist is null)
+//
+//Set up the setList/usernameList (save it in game), save active set in users, save all inactive sets in user
+//rotate sets --> check if set is in inactive set, set this to activce if yes!
+//Service: check if game.getSetList = null
+//if yes --> use constructor of Setlist (in this also user entity.activeset save, game.setSetlist...)
+//if no --> rotate the  setlist in this class (check activesets...), game.setSetlist(Setist), save game
+//controller : return getSetListDTO
+
+
+
+
+
+
+public class SetList{
+
+    private List<String> usernames;
+    private List<Set> sets;
+    private List<User> players;
+
+
+
+    public SetList(List <User> players){
+
+    }
+
+    public List<User> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<User> players) {
+        this.players = players;
+    }
+
+    public void setUsernames(List<String> usernames) {
+        this.usernames = usernames;
+    }
+
+    public void setSets(List<Set> sets) {
+        this.sets = sets;
+    }
+
+
+    public List<String> getUsernames() {
+        return usernames;
+    }
+
+    public List<Set> getSets() {
+        return sets;
+    }
+
+
+
+}
+
+
+
+
+//jakobs Implementation
+
 @Transactional
 @Entity
 @Table(name = "SETLIST")
