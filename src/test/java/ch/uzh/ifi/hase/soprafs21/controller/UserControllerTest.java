@@ -104,28 +104,19 @@ public class UserControllerTest {
     }
 
     @Test
-    public void givenUserInLobby_ready_enoughPlayers() throws Exception {
+    public void givenUserInLobby_ready() throws Exception {
         // given
         User admin = new User();
         admin.setUsername("firstname@admin");
         admin.setScore(0);
-
-        User user = new User();
-        user.setUsername("firstname@lastname");
-        user.setScore(0);
 
         Lobby lobby = new Lobby();
         lobby.setLobbyName("test");
         lobby.setLobbyId(1000L);
         lobby.setAdmin(admin);
         lobby.join(admin);
-        lobby.join(user);
 
-        user.setPlayerStatus(PlayerStatus.READY);
-        admin.setPlayerStatus(PlayerStatus.READY);
-
-        Long userId = user.getId();
-        Long adminId = admin.getId();
+        lobbyService.makePlayerReady(admin.getId(), admin);
 
         List<User> allUsersInLobby = lobby.getPlayersInLobby();
 
@@ -141,6 +132,7 @@ public class UserControllerTest {
         mockMvc.perform(putRequest).andExpect(status().isNoContent())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
