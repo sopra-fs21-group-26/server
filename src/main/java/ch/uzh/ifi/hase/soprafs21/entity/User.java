@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -265,6 +266,14 @@ public class User implements Serializable {
 
     public int getScore(){
         return this.score;
+    }
+
+    public void setUpNewUser(){
+        this.setToken(UUID.randomUUID().toString());
+        this.setOnlineStatus(OnlineStatus.ONLINE);
+        this.setCreatedOn();
+        this.resetPoints();
+        this.setScore(0);
     }
 
     /*public Set getActiveSet() {
