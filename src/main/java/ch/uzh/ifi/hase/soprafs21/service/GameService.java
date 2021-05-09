@@ -342,10 +342,12 @@ public class GameService {
         Game game = gameRepository.findByGameId(gameId);
         Lobby lobby = lobbyRepository.findByLobbyId(gameId);
 
-        game.resetAllHasCreated();
+        game.resetEverythingForNextRound();
+
+        /*game.resetAllHasCreated();
         game.resetAllHasGuessed();
         game.resetAllAreReadyForNextRound();
-        game.setAllPlayerStatusToPlaying();
+        game.setAllPlayerStatusToPlaying();*/
         lobby.setAllAreReadyForNextRound(false);
         lobby.setIsEndGame(false);
         gameRepository.save(game);
@@ -359,10 +361,12 @@ public class GameService {
         Game gameToFinish = gameRepository.findByGameId(gameId);
         Lobby lobbyToFinish = lobbyRepository.findByLobbyId(gameId);
 
-        userWhoFinishedGame.setReadyForNextRound(false);
+        userWhoFinishedGame.setUpForFinishGame();
+
+        /*userWhoFinishedGame.setReadyForNextRound(false);
         userWhoFinishedGame.setPlayerStatus(PlayerStatus.FINISHED);
         userWhoFinishedGame.setHasCreated(false);
-        userWhoFinishedGame.setHasGuessed(false);
+        userWhoFinishedGame.setHasGuessed(false);*/
 
         if (userWhoFinishedGame.getToken().equals(lobbyToFinish.getAdmin().getToken())){
 

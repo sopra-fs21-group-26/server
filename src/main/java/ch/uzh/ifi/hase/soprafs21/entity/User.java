@@ -276,6 +276,13 @@ public class User implements Serializable {
         this.setScore(0);
     }
 
+    public void setUpForFinishGame(){
+        this.setReadyForNextRound(false);
+        this.setPlayerStatus(PlayerStatus.FINISHED);
+        this.setHasCreated(false);
+        this.setHasGuessed(false);
+    }
+
     /*public Set getActiveSet() {
         return this.activeSet;
     }

@@ -198,6 +198,13 @@ public class Game implements Serializable {
         this.resetAllHasCreated();
     }
 
+    public void resetEverythingForNextRound(){
+        this.resetAllHasCreated();
+        this.resetAllHasGuessed();
+        this.resetAllAreReadyForNextRound();
+        this.setAllPlayerStatusToPlaying();
+    }
+
     /*public SetList getSetList() {
         return this.setList;
     }
