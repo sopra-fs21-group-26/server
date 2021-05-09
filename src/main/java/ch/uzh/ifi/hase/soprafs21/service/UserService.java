@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,6 +60,7 @@ public class UserService {
                 }
             }
         }
+        Collections.reverse(users);
     }
 
     public User createUser(User newUser) {
