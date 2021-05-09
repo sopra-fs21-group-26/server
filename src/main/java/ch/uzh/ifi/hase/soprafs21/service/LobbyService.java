@@ -181,10 +181,7 @@ public class LobbyService {
             }
             else{
                 userToLeave.setPlayerStatus(PlayerStatus.LEFT);
-                lobby.setUpPlayerLeave(userToLeave);
-                /*lobby.decreaseNumbersOfPlayers();
-                lobby.deletePlayerInPlayersInLobby(userToLeave);
-                lobby.setAdmin(lobby.getPlayersInLobby().get(0));*/
+                lobby.setUpPlayerLeaveAdmin(userToLeave);
                 lobbyRepository.save(lobby);
                 lobbyRepository.flush();
                 userRepository.save(userToLeave);
@@ -198,9 +195,8 @@ public class LobbyService {
             lobby.setLobbyStatus(LobbyStatus.WAITING);
         }
 
-        lobby.decreaseNumbersOfPlayers();
-        lobby.deletePlayerInPlayersInLobby(userToLeave);
         userToLeave.setPlayerStatus(PlayerStatus.LEFT);
+        lobby.setUpPlayerLeaveNoAdmin(userToLeave);
 
         lobbyRepository.save(lobby);
         lobbyRepository.flush();
@@ -277,14 +273,14 @@ public class LobbyService {
         lobbyRepository.flush();
     }
 
-    public void resetAllPLayerPoints(Lobby lobby) {
+    /*public void resetAllPLayerPoints(Lobby lobby) {
         List<User> players = lobby.getPlayersInLobby();
         for (User user : players) {
             user.resetPoints();
             userRepository.save(user);
             userRepository.flush();
         }
-    }
+    }*/
 
     public boolean areAllReady(long lobbyId){
         Lobby lobby = lobbyRepository.findByLobbyId(lobbyId);
@@ -342,13 +338,7 @@ public class LobbyService {
         }
 
         Game game = new Game(lobbyId, players);
-        game.setAdmin(lobby.getAdmin());
-        game.setGameName(lobby.getLobbyName());
-        game.setNumbersOfPlayers(lobby.getNumbersOfPlayers());
-        game.setPlayersInGame(lobby.getPlayersInLobby());
-        game.setGameRound(1);
-        game.resetAllHasCreated();
-        game.resetAllHasCreated();
+        game.setGameUp(lobby);
 
         gameRepository.save(game);
         gameRepository.flush();
@@ -356,7 +346,7 @@ public class LobbyService {
         lobby.changeAllPLayerStatusToPlaying();
         lobby.increaseAllPlayerGamesPlayed();
         lobby.setLobbyStatus(LobbyStatus.PLAYING);
-        this.resetAllPLayerPoints(lobby);
+        lobby.resetAllPlayerPoints();
         lobbyRepository.save(lobby);
         lobbyRepository.flush();
 

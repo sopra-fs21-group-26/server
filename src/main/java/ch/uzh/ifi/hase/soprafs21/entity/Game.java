@@ -188,6 +188,16 @@ public class Game implements Serializable {
         this.gridStatus = gridStatus;
     }
 
+    public void setGameUp(Lobby lobby){
+        this.setAdmin(lobby.getAdmin());
+        this.setGameName(lobby.getLobbyName());
+        this.setNumbersOfPlayers(lobby.getNumbersOfPlayers());
+        this.setPlayersInGame(lobby.getPlayersInLobby());
+        this.setGameRound(1);
+        this.resetAllHasCreated();
+        this.resetAllHasCreated();
+    }
+
     /*public SetList getSetList() {
         return this.setList;
     }

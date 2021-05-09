@@ -181,10 +181,21 @@ public class Lobby implements Serializable {
         this.setIsEndGame(false);
     }
 
-    public void setUpPlayerLeave(User userToLeave){
+    public void setUpPlayerLeaveAdmin(User userToLeave){
         this.decreaseNumbersOfPlayers();
         this.deletePlayerInPlayersInLobby(userToLeave);
         this.setAdmin(this.getPlayersInLobby().get(0));
+    }
+
+    public void setUpPlayerLeaveNoAdmin(User userToLeave){
+        this.decreaseNumbersOfPlayers();
+        this.deletePlayerInPlayersInLobby(userToLeave);
+    }
+
+    public void resetAllPlayerPoints(){
+        for (User user : this.getPlayersInLobby()) {
+            user.resetPoints();
+        }
     }
 
 }
