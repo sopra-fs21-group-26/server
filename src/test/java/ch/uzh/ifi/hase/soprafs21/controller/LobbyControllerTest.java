@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,13 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * UserControllerTest
- * This is a WebMvcTest which allows to test the UserController i.e. GET/POST request without actually sending them over the network.
- * This tests if the UserController works.
- */
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
+@WebMvcTest(LobbyController.class)
+public class LobbyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,66 +41,83 @@ public class UserControllerTest {
     private UserService userService;
 
     @MockBean
+    private GameService gameService;
+
+    @MockBean
     private LobbyService lobbyService;
 
     @Test
-    public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
+    public void givenLobby_joinLobby() throws Exception {
         // given
         User user = new User();
         user.setUsername("firstname@lastname");
         user.setScore(0);
 
-        List<User> allUsers = Collections.singletonList(user);
+        Lobby lobby = new Lobby();
+        lobby.setLobbyName("test");
+        lobby.setLobbyId(1000L);
+        lobby.join(user);
 
-        // this mocks the UserService -> we define above what the userService should return when getUsers() is called
-        given(userService.getSortedUsers()).willReturn(allUsers);
+        // this mocks the LobbyService -> we define above what the lobbyService should return
+        given(lobbyService.getSingleLobbyById(1000L)).willReturn(lobby);
 
-        // when
-        MockHttpServletRequestBuilder getRequest = get("/players/leaderboard").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/1000/join");
 
         // then
-        mockMvc.perform(getRequest).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-                .andExpect(jsonPath("$[0].score", is(user.getScore())));
+        mockMvc.perform(putRequest).andExpect(status().isNoContent())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test
-    public void createUser_validInput_userCreated() throws Exception {
+    public void givenUserInLobby_leaveLobby() throws Exception {
         // given
         User user = new User();
-        user.setId(1L);
-        user.setUsername("testUsername");
-        user.setToken("1");
-        user.setOnlineStatus(OnlineStatus.ONLINE);
-        user.setPassword("TestPassword");
-        user.setCreatedOn();
-        //user.setCurrentlyCreating("TestCurrentlyCreating");
-        user.setGuessedOtherPicturesCorrectly(1);
-        user.setOwnPicturesCorrectlyGuessed(1);
-        user.setPlayerStatus(PlayerStatus.FINISHED);
-        user.setScore(1);
+        user.setUsername("firstname@lastname");
+        user.setScore(0);
 
-        UserPostDTO userPostDTO = new UserPostDTO();
-        userPostDTO.setUsername("testUsername");
+        Lobby lobby = new Lobby();
+        lobby.setLobbyName("test");
+        lobby.setLobbyId(1000L);
+        lobby.setAdmin(user);
+        lobby.join(user);
+        lobby.deletePlayerInPlayersInLobby(user);
 
-        given(userService.createUser(Mockito.any())).willReturn(user);
+        // this mocks the LobbyService -> we define above what the lobbyService should return
+        given(lobbyService.getSingleLobbyById(1000L)).willReturn(lobby);
 
-        // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = post("/players")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userPostDTO));
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/1000/leave");
 
         // then
-        mockMvc.perform(postRequest)
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.status", is(user.getOnlineStatus().toString())));
+        mockMvc.perform(putRequest).andExpect(status().isNoContent())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test
-    public void givenUserInLobby_ready_enoughPlayers() throws Exception {
+    public void givenUserInLobby_terminateLobby_userIsAdmin() throws Exception {
+        // given
+        User user = new User();
+        user.setUsername("firstname@lastname");
+        user.setScore(0);
+
+        Lobby lobby = new Lobby();
+        lobby.setLobbyName("test");
+        lobby.setLobbyId(1000L);
+        lobby.setAdmin(user);
+        lobby.join(user);
+        lobby.setUpPlayerLeaveAdmin(user);
+
+        // this mocks the LobbyService -> we define above what the lobbyService should return
+        given(lobbyService.getSingleLobbyById(1000L)).willReturn(lobby);
+
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/1000/terminate");
+
+        // then
+        mockMvc.perform(putRequest).andExpect(status().isNoContent())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    public void givenUserInLobby_terminateLobby_userNotAdmin() throws Exception {
         // given
         User admin = new User();
         admin.setUsername("firstname@admin");
@@ -120,31 +133,24 @@ public class UserControllerTest {
         lobby.setAdmin(admin);
         lobby.join(admin);
         lobby.join(user);
-
-        user.setPlayerStatus(PlayerStatus.READY);
-        admin.setPlayerStatus(PlayerStatus.READY);
-
-        Long userId = user.getId();
-        Long adminId = admin.getId();
-
-        List<User> allUsersInLobby = lobby.getPlayersInLobby();
+        lobby.setUpPlayerLeaveNoAdmin(user);
 
         // this mocks the LobbyService -> we define above what the lobbyService should return
         given(lobbyService.getSingleLobbyById(1000L)).willReturn(lobby);
 
-        // this mocks the LobbyService -> we define above what the lobbyService should return
-        given(userService.getSortedUsers()).willReturn(allUsersInLobby);
-
-        MockHttpServletRequestBuilder putRequest = put("/lobbies/1000/ready");
+        MockHttpServletRequestBuilder putRequest = put("/lobbies/1000/terminate");
 
         // then
         mockMvc.perform(putRequest).andExpect(status().isNoContent())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
+
+
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
      * Input will look like this: {"name": "Test User", "username": "testUsername"}
+     *
      * @param object
      * @return string
      */
