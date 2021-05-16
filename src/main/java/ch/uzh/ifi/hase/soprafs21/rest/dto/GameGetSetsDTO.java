@@ -1,4 +1,4 @@
-/*package ch.uzh.ifi.hase.soprafs21.rest.dto;
+package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs21.entity.ScoreSheet;
 import ch.uzh.ifi.hase.soprafs21.constant.Set;
@@ -15,4 +15,4 @@ public class GameGetSetsDTO {
     public void setSetList(Hashtable<String, Set> setList) {
         this.setList = setList;
     }
-}*/
+}

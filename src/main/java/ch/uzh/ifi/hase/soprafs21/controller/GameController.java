@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-//import ch.uzh.ifi.hase.soprafs21.constant.Set;
+import ch.uzh.ifi.hase.soprafs21.constant.Set;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -184,14 +184,14 @@ public class GameController {
         return haveAllGuessed;
     }
 
-    /*@GetMapping("/games/{gameID}/sets-rotation")
+    @GetMapping("/games/{gameID}/sets-rotation")
     @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
     @ResponseBody
     public GameGetSetsDTO rotateSets(@PathVariable long gameID) throws IOException, ParseException {
         Game game = gameService.getGame(gameID);
         SetList sets = gameService.rotateSets(game);
         return DTOMapper.INSTANCE.convertEntityToGameGetSetsDTO(sets);
-    }*/
+    }
 
     //request for next round:
     //--> check if there is next round:

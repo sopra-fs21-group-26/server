@@ -1,4 +1,4 @@
-/*package ch.uzh.ifi.hase.soprafs21.entity;
+package ch.uzh.ifi.hase.soprafs21.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Set;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,81 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 //controller : return getSetListDTO
 
 
-
-
-
-
-public class SetList{
-
-    private List<String> usernames;
-    private List<Set> sets;
-    private List<User> players;
-
-
-
-    public SetList(List <User> players){
-
-    }
-
-    public List<User> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<User> players) {
-        this.players = players;
-    }
-
-    public void setUsernames(List<String> usernames) {
-        this.usernames = usernames;
-    }
-
-    public void setSets(List<Set> sets) {
-        this.sets = sets;
-    }
-
-
-    public List<String> getUsernames() {
-        return usernames;
-    }
-
-    public List<Set> getSets() {
-        return sets;
-    }
-
-
-
-}
-
-
-
-
 //jakobs Implementation
 
 @Transactional
 @Entity
+@Service
 @Table(name = "SETLIST")
 public class SetList implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @OneToOne(targetEntity=UserRepository.class, fetch=FetchType.EAGER)
     private final UserRepository userRepository;
-
-    @Id
-    @GeneratedValue
-    private Long setListId;
-    @ManyToMany(targetEntity=User.class, fetch=FetchType.EAGER)
-    private List<User> players;
-    @Column
-    private Hashtable<String, Set> setList = new Hashtable<>();
-    @ManyToMany(targetEntity=Set.class, fetch=FetchType.EAGER)
-    private List<Set> sets = new LinkedList<Set>() {{
-        add(Set.CARDS);
-        add(Set.FORMS);
-        add(Set.LACES);
-        add(Set.TILES);
-        add(Set.STICKS);
-        }};
-    @Column
-    private Queue<Set> inactiveSets;
 
     @Autowired
     public SetList(@Qualifier("userRepository") UserRepository userRepository) {
@@ -108,6 +45,24 @@ public class SetList implements Serializable {
         this.players = players;
         initializeSetList();
     }
+
+    @Id
+    @GeneratedValue
+    private Long setListId;
+    @ManyToMany(targetEntity=User.class, fetch=FetchType.EAGER)
+    private List<User> players;
+    @Column
+    private Hashtable<String, Set> setList = new Hashtable<>();
+    @ManyToMany(targetEntity=Set.class, fetch=FetchType.EAGER)
+    private List<Set> sets = new LinkedList<>() {{
+        add(Set.CARDS);
+        add(Set.FORMS);
+        add(Set.LACES);
+        add(Set.TILES);
+        add(Set.STICKS);
+        }};
+    @ManyToMany(targetEntity=Set.class, fetch=FetchType.EAGER)
+    private List<Set> inactiveSets;
 
     public void initializeSetList() {
         int index = 0;
@@ -141,7 +96,7 @@ public class SetList implements Serializable {
             }
         }
         else {
-            Set temp = inactiveSets.remove();
+            Set temp = inactiveSets.remove(inactiveSets.size()-1);
             for (User player : this.players){
                 Set oldSet = player.getActiveSet();
                 String name = player.getUsername();
@@ -160,4 +115,4 @@ public class SetList implements Serializable {
     public Hashtable<String, Set> getSetList() {
         return this.setList;
     }
-}*/
+}

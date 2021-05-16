@@ -42,8 +42,8 @@ public class Game implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private ScoreSheet scoreSheet;
 
-    /*@OneToOne(cascade = CascadeType.ALL)
-    private SetList setList;*/
+    @OneToOne(cascade = CascadeType.ALL)
+    private SetList setList;
 
     @Column
     private int gameRound;
@@ -54,7 +54,7 @@ public class Game implements Serializable {
 
     public Game(long lobbyId, List<User> players) {
         this.scoreSheet = new ScoreSheet(players);
-        //this.setList = new SetList((UserRepository) players);
+        this.setList = new SetList((UserRepository) players);
         this.gameId = lobbyId;
         this.picturesonGrid = new ArrayList<>();
         this.gridStatus = false;
@@ -205,12 +205,12 @@ public class Game implements Serializable {
         this.setAllPlayerStatusToPlaying();
     }
 
-    /*public SetList getSetList() {
+    public SetList getSetList() {
         return this.setList;
     }
 
     public void rotateSets() {
         this.setList.rotateSetList();
-    }*/
+    }
 
 }
