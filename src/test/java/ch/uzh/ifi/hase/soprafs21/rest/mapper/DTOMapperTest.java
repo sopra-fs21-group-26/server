@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import org.junit.jupiter.api.Test;
@@ -69,5 +70,34 @@ public class DTOMapperTest {
         LobbyGetDTO lobbyGetDTO = LobbyDTOMapper.INSTANCE.convertEntityToLobbyGetDTO(lobby);
 
         assertEquals(lobby.getIsEndGame(), lobbyGetDTO.getIsEndGame());
+    }
+
+    @Test
+    void testLoginGetUser_fromUser_toUserGetDTO_success() {
+        // create User
+        User user = new User();
+        user.setToken("1");
+
+        // MAP -> Create UserGetDTO
+        UserGetDTO userLoginGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
+        // check content
+        assertEquals(user.getId(), userLoginGetDTO.getId());
+        assertEquals(user.getToken(), userLoginGetDTO.getToken());
+    }
+
+    @Test
+    void testPutUser_fromUser_toUserPutDTO_success() {
+        // create User
+        UserPostDTO userPutDTO = new UserPostDTO();
+        userPutDTO.setUsername("firstname@lastname");
+        userPutDTO.setPassword("password");
+
+        // MAP -> Create UserGetDTO
+        User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPutDTO);
+
+        // check content
+        assertEquals(user.getUsername(), userPutDTO.getUsername());
+        assertEquals(user.getPassword(), userPutDTO.getPassword());
     }
 }
