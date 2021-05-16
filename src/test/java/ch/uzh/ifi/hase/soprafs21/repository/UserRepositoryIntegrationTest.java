@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,7 @@ public class UserRepositoryIntegrationTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    @Autowired
+    @MockBean
     private UserRepository userRepository;
 
     @Test
