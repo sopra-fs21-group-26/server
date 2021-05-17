@@ -4,6 +4,9 @@ import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutTokenUsernameDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +27,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,6 +100,215 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.username", is(user.getUsername())))
                 .andExpect(jsonPath("$.status", is(user.getOnlineStatus().toString())));
     }
+
+    @Test
+    public void getSearchedUser_ValidInput() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        given(userService.checkIfUsernameExists(Mockito.any())).willReturn(user);
+
+        MockHttpServletRequestBuilder getRequest = get("/players/search/" + user.getUsername())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(user.getUsername()));
+
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    public void getSingleUser_ValidInput() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        given(userService.getSingleUser(Mockito.anyLong())).willReturn(user);
+
+        MockHttpServletRequestBuilder getRequest = get("/players/" + user.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.score", is(user.getScore())));
+
+    }
+
+    @Test
+    public void logoutUser_ValidInput() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        UserPutTokenDTO userPutTokenDTO = new UserPutTokenDTO();
+        userPutTokenDTO.setToken("test");
+
+        MockHttpServletRequestBuilder putRequest = put("/logout")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPutTokenDTO));
+
+        mockMvc.perform(putRequest)
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    public void loginUser_ValidInput() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setPassword("TestPassword");
+        userPostDTO.setUsername("TestUsername");
+
+        MockHttpServletRequestBuilder putRequest = put("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
+
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    public void checkEditPermission_PermissionGranted() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        given(userService.checkEditPermission(Mockito.anyString(), Mockito.anyLong())).willReturn(true);
+
+
+        MockHttpServletRequestBuilder putRequest = put("/edit/" + user.getToken() + "/" + user.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk());
+
+
+    }
+
+    @Test
+    public void checkEditPermission_NoPermission() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        given(userService.checkEditPermission(Mockito.anyString(), Mockito.anyLong())).willReturn(false);
+
+
+        MockHttpServletRequestBuilder putRequest = put("/edit/" + user.getToken() + "/" + user.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk());
+
+    }
+
+
+    @Test
+    public void checkEditUser_ValidInput() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setOnlineStatus(OnlineStatus.ONLINE);
+        user.setPassword("TestPassword");
+        user.setCreatedOn();
+        //user.setCurrentlyCreating("TestCurrentlyCreating");
+        user.setGuessedOtherPicturesCorrectly(1);
+        user.setOwnPicturesCorrectlyGuessed(1);
+        user.setPlayerStatus(PlayerStatus.FINISHED);
+        user.setScore(1);
+
+        UserPutTokenUsernameDTO userPutTokenUsernameDTO = new UserPutTokenUsernameDTO();
+        userPutTokenUsernameDTO.setToken("Test");
+        userPutTokenUsernameDTO.setUsername("TestUsernane");
+
+        given(userService.editUser(Mockito.any(User.class))).willReturn(user);
+
+        MockHttpServletRequestBuilder putRequest = put("/edit/profile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPutTokenUsernameDTO));
+
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk());
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
