@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 //import ch.uzh.ifi.hase.soprafs21.constant.Set;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class GameController {
@@ -236,6 +233,19 @@ public class GameController {
     public boolean hasGrid(@PathVariable long gameId){
         boolean hasGrid = gameService.hasGrid(gameId);
         return hasGrid;
+    }
+
+    @GetMapping("/rotation")
+    @ResponseStatus(HttpStatus.OK) //Corresponding to REST Specification
+    @ResponseBody
+    public int rotateSets(){
+        Random set = new Random();
+        int number = set.nextInt() % 5;
+        if (number <0){
+            number = number * -1;
+            return number;
+        }
+        return number;
     }
 
 
