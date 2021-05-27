@@ -1,3 +1,4 @@
+/*
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
@@ -16,11 +17,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+*/
 /**
  * Test class for the UserResource REST resource.
  *
  * @see LobbyService
- */
+ *//*
+
 @WebAppConfiguration
 @SpringBootTest
 public class UserServiceIntegrationTest {
@@ -184,3 +187,4 @@ public class UserServiceIntegrationTest {
 
 
 }
+*/
