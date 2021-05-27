@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -99,4 +101,86 @@ public class UserServiceIntegrationTest {
         // check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }
+
+    @Test
+    public void getSortedUsers_successful() {
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setToken("1");
+        testUser.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser.setPassword("TestPassword");
+        testUser.setCreatedOn();
+        //testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        testUser.setGuessedOtherPicturesCorrectly(1);
+        testUser.setOwnPicturesCorrectlyGuessed(1);
+        testUser.setPlayerStatus(PlayerStatus.FINISHED);
+        testUser.setScore(1);
+
+        userRepository.save(testUser);
+        userRepository.flush();
+
+
+
+        // attempt to create second user with same username
+
+        List<User> sortedUsers = userService.getSortedUsers();
+
+        // check that an error is thrown
+        assertEquals(1, sortedUsers.size());
+    }
+
+    @Test
+    public void logoutUser_successful() {
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setToken("1");
+        testUser.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser.setPassword("TestPassword");
+        testUser.setCreatedOn();
+        //testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        testUser.setGuessedOtherPicturesCorrectly(1);
+        testUser.setOwnPicturesCorrectlyGuessed(1);
+        testUser.setPlayerStatus(PlayerStatus.FINISHED);
+        testUser.setScore(1);
+
+        userRepository.save(testUser);
+        userRepository.flush();
+
+
+
+        // attempt to create second user with same username
+
+        userService.logoutUser(testUser);
+
+        // check that an error is thrown
+        assertEquals(OnlineStatus.ONLINE, testUser.getOnlineStatus());
+    }
+
+    @Test
+    public void logoutUser_notSuccessful() {
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setToken("1");
+        testUser.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser.setPassword("TestPassword");
+        testUser.setCreatedOn();
+        //testUser.setCurrentlyCreating("TestCurrentlyCreating");
+        testUser.setGuessedOtherPicturesCorrectly(1);
+        testUser.setOwnPicturesCorrectlyGuessed(1);
+        testUser.setPlayerStatus(PlayerStatus.FINISHED);
+        testUser.setScore(1);
+
+
+
+
+        // attempt to create second user with same username
+
+        // check that an error is thrown
+        assertThrows(ResponseStatusException.class, () -> userService.logoutUser(testUser));
+    }
+
+
 }
