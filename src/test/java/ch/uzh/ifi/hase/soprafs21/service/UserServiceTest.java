@@ -145,6 +145,117 @@ public class UserServiceTest {
         // then -> attempt to create second user with same user -> check that an error is thrown
         assert(userList.size()>0);
     }
+    @Test
+    public void bubbleSortTest() {
+        // given -> a first user has already been created
+        User testUser2 = new User();
+        testUser2.setId(2L);
+        testUser2.setUsername("testUsername2");
+        testUser2.setToken("2");
+        testUser2.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser2.setPassword("TestPassword2");
+        testUser2.setCreatedOn();
+        testUser2.setGuessedOtherPicturesCorrectly(1);
+        testUser2.setOwnPicturesCorrectlyGuessed(1);
+        testUser2.setPlayerStatus(PlayerStatus.READY);
+        testUser2.setScore(5);
+
+        userRepository.saveAndFlush(testUser);
+        userRepository.saveAndFlush(testUser2);
+
+        List<User> userList = new ArrayList<>();
+        userList.add(testUser2);
+        userList.add(testUser);
+
+
+        userService.bubbleSort(userList);
+
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assert(userList.get(1).getScore() > userList.get(0).getScore());
+    }
+
+    @Test
+    public void userLogout_success() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        userService.logoutUser(testUser);
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assertEquals(testUser.getOnlineStatus(), OnlineStatus.OFFLINE);
+    }
+
+    @Test
+    public void userLogout_fail() {
+
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assertThrows(ResponseStatusException.class, () -> userService.logoutUser(testUser));
+    }
+
+    @Test
+    public void userLoginStatus_success() {
+        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(testUser);
+        userService.checkLogin(testUser);
+        assertEquals(testUser.getOnlineStatus(), OnlineStatus.ONLINE);
+    }
+
+    @Test
+    public void userLoginStatus_noUser() {
+        assertThrows(ResponseStatusException.class, () -> userService.checkLogin(testUser));
+    }
+    @Test
+    public void userLoginStatus_wrongPassword() {
+        User testUser2 = new User();
+        testUser2.setId(2L);
+        testUser2.setUsername("testUsername2");
+        testUser2.setToken("2");
+        testUser2.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser2.setPassword("TestPassword2");
+        testUser2.setCreatedOn();
+        testUser2.setGuessedOtherPicturesCorrectly(1);
+        testUser2.setOwnPicturesCorrectlyGuessed(1);
+        testUser2.setPlayerStatus(PlayerStatus.READY);
+        testUser2.setScore(1);
+        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(testUser2);
+        assertThrows(ResponseStatusException.class, () -> userService.checkLogin(testUser));
+    }
+
+    @Test
+    public void getSingleUserID_fail() {
+        Mockito.when(userRepository.findById(Mockito.any())).thenReturn(java.util.Optional.ofNullable(testUser));
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assertThrows(ResponseStatusException.class, () -> userService.getSingleUser(testUser.getId()));
+    }
+
+    @Test
+    public void getSingleUserID_success() {
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(testUser);
+        User test = userService.getSingleUser(testUser.getId());
+        assertEquals(testUser, test);
+    }
+
+    @Test
+    public void getSingleUserToken_success() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        User test = userService.getSingleUserByToken(testUser.getToken());
+        assertEquals(testUser, test);
+    }
+
+    @Test
+    public void getSingleUserToken_fail() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(null);
+        assertThrows(ResponseStatusException.class, () -> userService.getSingleUserByToken(testUser.getToken()));
+    }
+
+    @Test
+    public void checkUsername_success() {
+        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(testUser);
+        User test = userService.checkIfUsernameExists(testUser.getUsername());
+        assertEquals(testUser, test);
+    }
+
+    @Test
+    public void checkUsername_fail() {
+        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(null);
+        assertThrows(ResponseStatusException.class, () -> userService.checkIfUsernameExists(testUser.getUsername()));
+    }
 
 
 }
