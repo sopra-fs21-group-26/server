@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import ch.uzh.ifi.hase.soprafs21.constant.OnlineStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Picture;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,7 @@ public class UserServiceTest {
         testUser.setOnlineStatus(OnlineStatus.ONLINE);
         testUser.setPassword("TestPassword");
         testUser.setCreatedOn();
+        testUser.setRecreatedPicture(new Picture());
         //testUser.setCurrentlyCreating("TestCurrentlyCreating");
         testUser.setGuessedOtherPicturesCorrectly(1);
         testUser.setOwnPicturesCorrectlyGuessed(1);
@@ -257,5 +259,74 @@ public class UserServiceTest {
         assertThrows(ResponseStatusException.class, () -> userService.checkIfUsernameExists(testUser.getUsername()));
     }
 
+    @Test
+    public void checkEditPermission_success() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        boolean test = userService.checkEditPermission(testUser.getToken(), testUser.getId());
+        assertEquals(true, test);
+    }
+
+    @Test
+    public void checkEditPermission_fail() {
+        User testUser2 = new User();
+        testUser2.setId(2L);
+        testUser2.setUsername("testUsername2");
+        testUser2.setToken("2");
+        testUser2.setOnlineStatus(OnlineStatus.ONLINE);
+        testUser2.setPassword("TestPassword2");
+        testUser2.setCreatedOn();
+        testUser2.setGuessedOtherPicturesCorrectly(1);
+        testUser2.setOwnPicturesCorrectlyGuessed(1);
+        testUser2.setPlayerStatus(PlayerStatus.READY);
+        testUser2.setScore(1);
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser2);
+        boolean test = userService.checkEditPermission(testUser.getToken(), testUser.getId());
+        assertEquals(false, test);
+    }
+    @Test
+    public void editUser_success() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        User test = userService.editUser(testUser);
+        assertEquals(testUser, test);
+    }
+
+    @Test
+    public void addPoint_success() {
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(testUser);
+        int test = userService.addPoint(testUser.getId());
+        assertEquals(testUser.getPoints(), test);
+    }
+
+    @Test
+    public void setHasCreated_success() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        userService.setHasCreated(testUser);
+        assertEquals(testUser.isHasCreated(), true);
+    }
+
+    @Test
+    public void setHasCreated_noUser() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(null);
+        assertThrows(ResponseStatusException.class, () -> userService.setHasCreated(testUser));
+    }
+
+    @Test
+    public void setHasCreated_noRecreation() {
+        testUser.setRecreatedPicture(null);
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        assertThrows(ResponseStatusException.class, () -> userService.setHasCreated(testUser));
+    }
+
+    @Test
+    public void setHasGuessed_success() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(testUser);
+        userService.setHasGuessed(testUser);
+        assertEquals(testUser.isHasGuessed(), true);
+    }
+    @Test
+    public void setHasGuessed_noUser() {
+        Mockito.when(userRepository.findByToken(Mockito.anyString())).thenReturn(null);
+        assertThrows(ResponseStatusException.class, () -> userService.setHasGuessed(testUser));
+    }
 
 }
