@@ -282,7 +282,7 @@ public class LobbyServiceTest {
         // when
         //Lobby createdLobby = lobbyService.createLobby("TestName",testUser2);
 
-        assertEquals(2, allLobbies.size());
+        assertEquals(1, allLobbies.size());
 
     }
 

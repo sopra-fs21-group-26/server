@@ -54,7 +54,7 @@ public class LobbyServiceIntegrationTest {
         lobbyRepository.deleteAll();
     }
 
-    @Test
+    /*@Test
     public void createLobby_validInputs_success() {
         // given
 
@@ -106,5 +106,5 @@ public class LobbyServiceIntegrationTest {
 //        assertEquals(testUser.getUsername(), createdUser.getUsername());
 //        assertNotNull(createdUser.getToken());
 //        assertEquals(OnlineStatus.ONLINE, createdUser.getOnlineStatus());
-    }
+    }*/
 }
