@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Comparator;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,7 +45,7 @@ public class UserService {
     //Todo: Test if Bubblesort works when implemented score mechanism!
     public List<User> getSortedUsers() {
         List <User> users = this.userRepository.findAll();
-        bubbleSort(users);
+        users.sort(Comparator.comparing(User::getPoints));
         return users;
 
     }
