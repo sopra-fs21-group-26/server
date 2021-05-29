@@ -1,32 +1,32 @@
-# SoPra RESTful Service Template FS21
+# Welcome to Pictures
 
-## Getting started with Spring Boot
+## Introduction
 
--   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
--   Guides: http://spring.io/guides
-    -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
-    -   Building REST services with Spring: http://spring.io/guides/tutorials/bookmarks/
+In Pictures, each player simultaneously tries to copy a picture with one of five different materials: building blocks, sticks and stones, icon cards, color cubes, or a drawable string.
+<br/><br/>
+This project was developed as part of a software development course @ the University of Zurich.
 
-## Setup this Template with your IDE of choice
+## Technologies Used
 
-Download your IDE of choice: (e.g., [Eclipse](http://www.eclipse.org/downloads/), [IntelliJ](https://www.jetbrains.com/idea/download/)), [Visual Studio Code](https://code.visualstudio.com/) and make sure Java 15 is installed on your system (for Windows-users, please make sure your JAVA_HOME environment variable is set to the correct version of Java).
+The backend was fully developed using Java, Springboot & JPA.
 
-1. File -> Open... -> SoPra Server Template
-2. Accept to import the project as a `gradle project`
+## High Level Components
 
-To build right click the `build.gradle` file and choose `Run Build`
+* **userService:** has all the logic of players, responsible for registration, login, editing of users etc.
+* **lobbyService:** logic of creating/joining lobbies, ready system, anything that happens in between the menu screen and the start of the game
+* **gameService:** finally here we have all the game logic, hence this is our main component
 
-### VS Code
-The following extensions will help you to run it more easily:
--   `pivotal.vscode-spring-boot`
--   `vscjava.vscode-spring-initializr`
--   `vscjava.vscode-spring-boot-dashboard`
--   `vscjava.vscode-java-pack`
--   `richardwillis.vscode-gradle`
+**Correlation:** All users that get registered etc. in the userService class are part of a lobby in the lobbyService class.  
+Finally, after we start a game, we make a transition from the lobby service to the gameService. After pressing start the lobby entity converts to a game entity (with new attributes etc.). Hence this is one of our main functions. Without it, no game gets started/created.  
+<br/>
+Main class/function: Our main class is the gameService class because all of the game logic is implemented there.  
+The main functions are:
+* ch.uzh.ifi.hase.soprafs21.service.GameService#checkIfGuessCorrect
+* ch.uzh.ifi.hase.soprafs21.service.LobbyService#startGame  
 
-**Note:** You'll need to build the project first with Gradle, just click on the `build` command in the _Gradle Tasks_ extension. Then check the _Spring Boot Dashboard_ extension if it already shows `soprafs21` and hit the play button to start the server. If it doesn't show up, restart VS Code and check again.
+Without these two, a game would be unplayable. No game would be started or no points would be correctly distributed, which would make the whole game not worth playing.
 
-## Building with Gradle
+## Launch & Deployment
 
 You can use the local Gradle Wrapper to build the application.
 
@@ -77,7 +77,7 @@ If you want to avoid running all tests with every change, use the following comm
 
 ### Postman
 
--   We highly recommend to use [Postman](https://www.getpostman.com) in order to test your API Endpoints.
+-   We highly recommend to use [Postman](https://www.getpostman.com) in order to test API Endpoints.
 
 ## Debugging
 
@@ -94,6 +94,29 @@ do the following:
 5. Set breakpoints in the application where you need it
 6. Step through the process one step at a time
 
-## Testing
+## Roadmap
 
-Have a look here: https://www.baeldung.com/spring-boot-testing
+If you want to contribute to the project, you can find a selection of missing features below:
+
+* Functioning ELO scoring system
+* New kinds of sets
+* Other game modes with time limits
+
+## Authors and Acknowledgment
+
+**Project Lead & Frontend:** Maximilian Jonescu (https://github.com/maxi1123)  
+**Frontend & Game Flow:** Arjun Villanthanam (https://github.com/arjvillan)  
+**Backend Lead & Testing:** Max Zehnder (https://github.com/mzehnde)  
+**Backend Support:** Jakob Schmid (https://github.com/InfoYak)  
+<br/>
+Special thanks to our supervisor, Remy Egloff, for always lending a supportive hand: https://github.com/regloff
+
+## License
+
+![license.png](license.png)
+
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+<br/>
+<br/>
+Please find the license agreement by following the link below:  
+https://creativecommons.org/licenses/by-nc/4.0/legalcode
