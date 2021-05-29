@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Collections.reverse;
+
 /**
  * User Service
  * This class is the "worker" and responsible for all functionality related to the user
@@ -46,8 +48,8 @@ public class UserService {
     public List<User> getSortedUsers() {
         List <User> users = this.userRepository.findAll();
         users.sort(Comparator.comparing(User::getPoints));
+        reverse(users);
         return users;
-
     }
 
     public static void bubbleSort(List <User> users) {
@@ -62,7 +64,7 @@ public class UserService {
                 }
             }
         }
-        Collections.reverse(users);
+        reverse(users);
     }
 
     public User createUser(User newUser) {

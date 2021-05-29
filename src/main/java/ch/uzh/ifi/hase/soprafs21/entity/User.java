@@ -281,6 +281,8 @@ public class User implements Serializable {
         this.setPlayerStatus(PlayerStatus.FINISHED);
         this.setHasCreated(false);
         this.setHasGuessed(false);
+        this.setGuessedOtherPicturesCorrectly(0);
+        this.setOwnPicturesCorrectlyGuessed(0);
     }
 
 
