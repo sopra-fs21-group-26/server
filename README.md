@@ -105,6 +105,7 @@ If you want to contribute to the project, you can find a selection of missing fe
 * Functioning ELO scoring system
 * New kinds of sets
 * Other game modes with time limits
+* Currently, the leaderboard needs at least 5 players to be registered in order to function correctly. This is due to hardcoding and should be fixed soon.
 
 ## Authors and Acknowledgment
 
