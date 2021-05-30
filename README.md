@@ -1,4 +1,4 @@
-![Logo](src/pictures_logo.svg)
+[![Logo](src/pictures_logo.svg)](http://www.pictures-game.cc)
 
 [![Deploy Project](https://github.com/sopra-fs21-group-26/server/actions/workflows/deploy.yml/badge.svg)](https://github.com/sopra-fs21-group-26/server/actions/workflows/deploy.yml) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs21-group-26_server&metric=coverage)](https://sonarcloud.io/dashboard?id=sopra-fs21-group-26_server) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs21-group-26_server&metric=ncloc)](https://sonarcloud.io/dashboard?id=sopra-fs21-group-26_server) 
 
