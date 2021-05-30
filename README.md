@@ -1,4 +1,8 @@
-# Welcome to Pictures
+![Logo](src/pictures_logo.svg)
+
+[![Deploy Project](https://github.com/sopra-fs21-group-26/server/actions/workflows/deploy.yml/badge.svg)](https://github.com/sopra-fs21-group-26/server/actions/workflows/deploy.yml) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs21-group-26_server&metric=coverage)](https://sonarcloud.io/dashboard?id=sopra-fs21-group-26_server) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs21-group-26_server&metric=ncloc)](https://sonarcloud.io/dashboard?id=sopra-fs21-group-26_server) 
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=sopra-fs21-group-26_server)
 
 ## Introduction
 
